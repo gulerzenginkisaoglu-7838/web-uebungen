@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zahlenquiz Pro</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #dddddd;
+            --input-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        .dark-mode {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --border-color: #333333;
+            --input-bg: #2d2d2d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+        }
+
+        .main-layout {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            min-width: 300px;
+            max-width: 500px;
+            position: relative;
+            transition: background-color 0.3s;
+            z-index: 2;
+        }
+
+        .side-panel {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 300px;
+            transition: background-color 0.3s, opacity 0.3s;
+
+            position: absolute;
+            left: 100%;
+            top: 0;
+            margin-left: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .side-panel {
+                position: static;
+                width: 100%;
+                max-width: 500px;
+                margin-left: 0;
+                margin-top: 20px;
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+
+        .score-board {
+            background-color: rgba(128, 128, 128, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .question-area {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        input.success {
+            border-color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        input.error {
+            border-color: var(--error-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .result-message {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            min-height: 1.5em;
+        }
+
+        .text-success {
+            color: var(--success-color);
+        }
+
+        .text-error {
+            color: var(--error-color);
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-layout">
+        <div class="container">
+            <header>
+                <h1>Zahlenquiz</h1>
+                <div class="header-controls">
+                    <button id="cheatSheetToggle" class="icon-btn" title="Spickzettel">💡</button>
+                    <button id="darkModeToggle" class="icon-btn" title="Design wechseln">🌓</button>
+                </div>
+            </header>
+
+            <div class="score-board">
+                Punkte: <span id="score">0</span> / <span id="total">0</span>
+            </div>
+
+            <div id="gameArea" class="hidden">
+                <div id="questionContainer" class="question-area"></div>
+
+                <div class="input-group">
+                    <label id="binLabel" for="binInput">Binär</label>
+                    <input type="text" id="binInput" placeholder="0" autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label id="hexLabel" for="hexInput">Hexadezimal</label>
+                    <input type="text" id="hexInput" placeholder="0" autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="decimalInput">Dezimal</label>
+                    <input type="text" id="decimalInput" placeholder="0" autocomplete="off">
+                </div>
+
+                <button id="checkAnswerButton" class="btn">Antwort prüfen</button>
+                <button id="showSolutionButton" class="btn btn-secondary hidden"
+                    style="background-color: #e67e22;">Lösung anzeigen</button>
+                <div id="result" class="result-message"></div>
+                <button id="nextButton" class="btn btn-secondary hidden">Nächste Frage</button>
+            </div>
+
+            <div id="startScreen">
+                <div class="instructions">
+                    <p>Trainiere deine Fähigkeiten in der Umrechnung von Zahlensystemen.</p>
+
+                    <div style="margin: 1.5rem 0;">
+                        <label for="difficultySelect" style="text-align: left;">Schwierigkeit:</label>
+                        <select id="difficultySelect"
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color); background: var(--input-bg); color: var(--text-color);">
+                            <option value="easy">Einfach (4-Bit / 0-15)</option>
+                            <option value="normal" selected>Normal (8-Bit / 0-255)</option>
+                            <option value="hard">Schwer (16-Bit / 0-65535)</option>
+                        </select>
+                    </div>
+
+                    <p><strong>Regeln:</strong></p>
+                    <p>Wähle deine Schwierigkeit und rechne die angezeigte Zahl in die anderen Systeme um.</p>
+                </div>
+                <button id="startButton" class="btn">Quiz Starten</button>
+            </div>
+        </div>
+
+        <div id="cheatSheet" class="side-panel hidden">
+            <h3 style="margin-bottom: 1rem; color: var(--text-color);">Spickzettel</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Binär-Werte (8-Bit):</strong></p>
+            <div
+                style="display: flex; justify-content: space-between; font-family: monospace; margin-bottom: 1rem; color: var(--text-color);">
+                <span>128</span><span>64</span><span>32</span><span>16</span><span>8</span><span>4</span><span>2</span><span>1</span>
+            </div>
+            <hr style="margin: 10px 0; border-color: var(--border-color);">
+            <p style="color: var(--text-secondary); margin-bottom: 0.5rem;"><strong>Hexadezimal:</strong></p>
+            <p style="color: var(--text-color);">0-9 = 0-9</p>
+            <p style="color: var(--text-color);">A=10, B=11, C=12</p>
+            <p style="color: var(--text-color);">D=13, E=14, F=15</p>
+        </div>
+    </div>
+
+    <script>
+        // Zustand
+        let currentQuestion = {};
+        let score = 0;
+        let totalQuestions = 0;
+
+        // Elemente
+        const els = {
+            startScreen: document.getElementById('startScreen'),
+            gameArea: document.getElementById('gameArea'),
+            questionContainer: document.getElementById('questionContainer'),
+            inputs: {
+                bin: document.getElementById('binInput'),
+                hex: document.getElementById('hexInput'),
+                dec: document.getElementById('decimalInput')
+            },
+            labels: {
+                bin: document.getElementById('binLabel'),
+                hex: document.getElementById('hexLabel')
+            },
+            buttons: {
+                start: document.getElementById('startButton'),
+                check: document.getElementById('checkAnswerButton'),
+                solve: document.getElementById('showSolutionButton'),
+                next: document.getElementById('nextButton'),
+                theme: document.getElementById('darkModeToggle'),
+                cheat: document.getElementById('cheatSheetToggle')
+            },
+            other: {
+                difficulty: document.getElementById('difficultySelect'),
+                cheatSheet: document.getElementById('cheatSheet')
+            },
+            result: document.getElementById('result'),
+            score: document.getElementById('score'),
+            total: document.getElementById('total')
+        };
+
+        // Hilfsfunktionen: Zufallszahl
+        const getRandomNumber = (max) => Math.floor(Math.random() * (max + 1));
+
+        // Hilfsfunktionen: Formate 
+        const toBin = (num, padding) => num.toString(2).padStart(padding, '0');
+        const toHex = (num, padding) => num.toString(16).toUpperCase().padStart(padding, '0');
+
+        // Spiel Logik
+        function generateQuestion() {
+            const difficulty = els.other.difficulty.value;
+            let maxVal, binPad, hexPad;
+
+            switch (difficulty) {
+                case 'easy': maxVal = 15; binPad = 4; hexPad = 1; break;
+                case 'hard': maxVal = 65535; binPad = 16; hexPad = 4; break;
+                case 'normal': default: maxVal = 255; binPad = 8; hexPad = 2; break;
+            }
+
+            // Update Labels
+            els.labels.bin.textContent = `Binär (${binPad} Bit)`;
+            els.labels.hex.textContent = `Hexadezimal (${hexPad} Stellen)`;
+            els.inputs.bin.placeholder = '0'.repeat(binPad);
+            els.inputs.hex.placeholder = '0'.repeat(hexPad);
+
+            const num = getRandomNumber(maxVal);
+            const type = Math.floor(Math.random() * 3); // 0: Bin, 1: Dec, 2: Hex
+
+            currentQuestion = {
+                num: num,
+                bin: toBin(num, binPad),
+                dec: num.toString(),
+                hex: toHex(num, hexPad),
+                type: type
+            };
+
+            // Reset UI
+            resetInputs();
+            els.result.textContent = '';
+            els.buttons.check.classList.remove('hidden');
+            els.buttons.solve.classList.add('hidden');
+            els.buttons.next.classList.add('hidden');
+
+            // Fragestellung setzen und Inputfelder deaktivieren
+            let questionText = '';
+            if (type === 0) {
+                questionText = `Binär: ${currentQuestion.bin}`;
+                els.inputs.bin.value = currentQuestion.bin;
+                els.inputs.bin.disabled = true;
+                setTimeout(() => els.inputs.hex.focus(), 50);
+            } else if (type === 1) {
+                questionText = `Dezimal: ${currentQuestion.dec}`;
+                els.inputs.dec.value = currentQuestion.dec;
+                els.inputs.dec.disabled = true;
+                setTimeout(() => els.inputs.bin.focus(), 50);
+            } else {
+                questionText = `Hex: ${currentQuestion.hex}`;
+                els.inputs.hex.value = currentQuestion.hex;
+                els.inputs.hex.disabled = true;
+                setTimeout(() => els.inputs.bin.focus(), 50);
+            }
+            els.questionContainer.textContent = questionText;
+        }
+
+        function resetInputs() {
+            Object.values(els.inputs).forEach(input => {
+                input.value = '';
+                input.disabled = false;
+                input.classList.remove('success', 'error');
+            });
+        }
+
+        function checkAnswer() {
+            const userBin = els.inputs.bin.value.trim();
+            const userHex = els.inputs.hex.value.trim().toUpperCase();
+            const userDec = els.inputs.dec.value.trim();
+
+            const isBinCorrect = userBin === currentQuestion.bin;
+            const isHexCorrect = userHex === currentQuestion.hex;
+            const isDecCorrect = userDec === currentQuestion.dec;
+
+            // Eingabefelder mit Farbe markieren
+            setInputStatus(els.inputs.bin, isBinCorrect);
+            setInputStatus(els.inputs.hex, isHexCorrect);
+            setInputStatus(els.inputs.dec, isDecCorrect);
+
+            const allCorrect = isBinCorrect && isHexCorrect && isDecCorrect;
+
+            if (allCorrect) {
+                els.result.innerHTML = '<span class="text-success">Richtig! 🎉</span>';
+                score++;
+                els.buttons.check.classList.add('hidden');
+                els.buttons.solve.classList.add('hidden');
+                els.buttons.next.classList.remove('hidden');
+                els.buttons.next.focus();
+            } else {
+                els.result.innerHTML = '<span class="text-error">Leider falsch. Versuche es noch einmal!</span>';
+                els.buttons.solve.classList.remove('hidden');
+            }
+
+            updateScoreBoard();
+        }
+
+        function showSolution() {
+            els.inputs.bin.value = currentQuestion.bin;
+            els.inputs.hex.value = currentQuestion.hex;
+            els.inputs.dec.value = currentQuestion.dec;
+
+            setInputStatus(els.inputs.bin, true);
+            setInputStatus(els.inputs.hex, true);
+            setInputStatus(els.inputs.dec, true);
+
+            els.result.innerHTML = '<span class="text-secondary">Lösung angezeigt. Keine Punkte.</span>';
+
+            els.buttons.check.classList.add('hidden');
+            els.buttons.solve.classList.add('hidden');
+            els.buttons.next.classList.remove('hidden');
+            els.buttons.next.focus();
+        }
+
+        function setInputStatus(input, isCorrect) {
+            input.classList.remove('success', 'error');
+            if (input.disabled) return; // Nicht markieren wenn disabled
+            input.classList.add(isCorrect ? 'success' : 'error');
+        }
+
+        function updateScoreBoard() {
+            els.score.textContent = score;
+            els.total.textContent = totalQuestions;
+        }
+
+        function startGame() {
+            els.startScreen.classList.add('hidden');
+            els.gameArea.classList.remove('hidden');
+            score = 0;
+            totalQuestions = 0;
+            updateScoreBoard();
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            totalQuestions++;
+            updateScoreBoard();
+            generateQuestion();
+        }
+
+        // Event prüfer
+        els.buttons.start.addEventListener('click', startGame);
+        els.buttons.check.addEventListener('click', checkAnswer);
+        els.buttons.solve.addEventListener('click', showSolution);
+        els.buttons.next.addEventListener('click', nextQuestion);
+        els.buttons.cheat.addEventListener('click', () => {
+            els.other.cheatSheet.classList.toggle('hidden');
+        });
+
+        // Enter Taste unterstützung
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (!els.gameArea.classList.contains('hidden')) {
+                    if (!els.buttons.check.classList.contains('hidden')) {
+                        checkAnswer();
+                    } else if (!els.buttons.next.classList.contains('hidden')) {
+                        nextQuestion();
+                    }
+                } else {
+                    startGame();
+                }
+            }
+        });
+
+        // Darkmode Logik
+        const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function applyTheme(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        }
+
+        // Theme initialisieren
+        const savedTheme = localStorage.getItem('darkMode');
+        if (savedTheme === 'enabled') applyTheme(true);
+        else if (savedTheme === 'disabled') applyTheme(false);
+        else applyTheme(systemDarkMode.matches);
+
+        // Theme umschalten
+        els.buttons.theme.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+
+        // System Theme prüfen
+        systemDarkMode.addEventListener('change', (e) => {
+            if (!localStorage.getItem('darkMode')) {
+                applyTheme(e.matches);
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT-Grundschutz Lernkarten</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0f1117;
+    --card-bg: #1a1d27;
+    --border: #2a2d3e;
+    --accent: #4f8ef7;
+    --accent2: #f7c94f;
+    --accent3: #4ff7a0;
+    --danger: #f74f4f;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --tag-bg: #1e2235;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  header {
+    text-align: center;
+    padding: 30px 0 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .stat {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .stat span { color: var(--accent); font-weight: 600; }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--tag-bg);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-family: 'IBM Plex Mono', monospace;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  .tab:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .card.green::before { background: var(--accent3); }
+  .card.yellow::before { background: var(--accent2); }
+  .card.red::before { background: var(--danger); }
+
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+  .card-label {
+    font-size: 0.7rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .card-de {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .card-tr {
+    font-size: 0.83rem;
+    color: var(--accent3);
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .card-body {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+
+  .card.expanded .card-body { display: block; }
+
+  .card-body p {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #b0b8c8;
+    margin-bottom: 8px;
+  }
+
+  .card-body p strong { color: var(--accent); }
+  .card-body .tr { color: var(--accent3); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-family: 'IBM Plex Mono', monospace;
+    margin-right: 4px;
+    margin-top: 4px;
+  }
+
+  .tag-muss { background: rgba(247,79,79,0.15); color: var(--danger); border: 1px solid var(--danger); }
+  .tag-sollte { background: rgba(247,201,79,0.15); color: var(--accent2); border: 1px solid var(--accent2); }
+  .tag-darf-nicht { background: rgba(79,142,247,0.15); color: var(--accent); border: 1px solid var(--accent); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+
+  th {
+    background: var(--tag-bg);
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+
+  tr:hover td { background: rgba(79,142,247,0.04); }
+
+  .kz {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.85rem;
+  }
+
+  .de-cell { color: var(--text); }
+  .tr-cell { color: var(--accent3); font-size: 0.78rem; }
+  .ex-cell { color: var(--muted); font-size: 0.76rem; font-style: italic; }
+
+  /* QUIZ */
+  .quiz-box {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .quiz-progress {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .quiz-progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .quiz-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s;
+  }
+
+  .quiz-question {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .quiz-hint {
+    font-size: 0.78rem;
+    color: var(--accent2);
+    margin-bottom: 20px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .quiz-option {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--tag-bg);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    text-align: left;
+    color: var(--text);
+  }
+
+  .quiz-option:hover:not(:disabled) { border-color: var(--accent); background: rgba(79,142,247,0.08); }
+  .quiz-option.correct { border-color: var(--accent3); background: rgba(79,247,160,0.1); color: var(--accent3); }
+  .quiz-option.wrong { border-color: var(--danger); background: rgba(247,79,79,0.1); color: var(--danger); }
+
+  .quiz-feedback {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(79,247,160,0.08); border: 1px solid var(--accent3); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(247,79,79,0.08); border: 1px solid var(--danger); color: #f9a8a8; }
+
+  .btn {
+    margin-top: 16px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .btn:hover { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+  }
+
+  .score-box {
+    text-align: center;
+    padding: 30px;
+  }
+
+  .score-big {
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent);
+  }
+
+  .score-label {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 0.85rem;
+  }
+
+  /* GEFÄHRDUNGEN */
+  .gef-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+  }
+
+  .gef-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .gef-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    background: rgba(79,142,247,0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .gef-de { font-size: 0.82rem; color: var(--text); font-weight: 600; }
+  .gef-tr { font-size: 0.75rem; color: var(--accent3); margin-top: 2px; }
+
+  .search-bar {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    outline: none;
+  }
+
+  .search-bar:focus { border-color: var(--accent); }
+  .search-bar::placeholder { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔐 IT-Grundschutz Lernkarten</h1>
+  <p>IHK AP1/AP2 + WiSo · Sınav Odaklı · DE + TR</p>
+  <div class="stats">
+    <div class="stat">Bausteine: <span>10</span></div>
+    <div class="stat">Gefährdungen: <span>47</span></div>
+    <div class="stat">Schutzziele: <span>3 (CIA)</span></div>
+    <div class="stat">14 Gebote: <span>§64 BDSG</span></div>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showSection('bausteine')">10 Bausteine</div>
+  <div class="tab" onclick="showSection('schutzziele')">Schutzziele CIA</div>
+  <div class="tab" onclick="showSection('gefaehrdungen')">47 Gefährdungen</div>
+  <div class="tab" onclick="showSection('gesetze')">Gesetze</div>
+  <div class="tab" onclick="showSection('gebote')">14 Gebote</div>
+  <div class="tab" onclick="showSection('quiz')">🎯 Quiz</div>
+</div>
+
+<!-- BAUSTEINE -->
+<div class="section active" id="bausteine">
+  <div class="section-title">10 IT-Grundschutz Bausteine / Yapı Taşları</div>
+  <div class="cards-grid">
+
+    <div class="card" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 1 · Prozess</div>
+      <div class="card-de">ISMS — Sicherheitsmanagement</div>
+      <div class="card-tr">Güvenlik Yönetim Sistemi</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Das ISMS ist die Grundlage aller Sicherheitsmaßnahmen. Es definiert Verfahren und Regeln, mit denen sich die Informationssicherheit steuern, kontrollieren und optimieren lässt.</p>
+        <p class="tr"><strong>TR:</strong> ISMS, tüm güvenlik önlemlerinin temelidir. Bilgi güvenliğinin yönetilmesi, denetlenmesi ve optimize edilmesi için kural ve prosedürleri tanımlar.</p>
+        <p><strong>Beispiel / Örnek:</strong> ISO 27001 Zertifizierung, BSI-Standard 200-1</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card green" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 2 · Prozess</div>
+      <div class="card-de">ORP — Organisation & Personal</div>
+      <div class="card-tr">Organizasyon & Personel</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Organisatorische und personelle Sicherheitsaspekte: Zuständigkeiten, Berechtigungen, Schulungen, Verhaltensregeln für Mitarbeiter.</p>
+        <p class="tr"><strong>TR:</strong> Organizasyonel ve personel güvenlik konuları: Sorumluluklar, yetkiler, eğitimler, çalışan kuralları.</p>
+        <p><strong>Teilbausteine:</strong> ORP.1 Organisation · ORP.2 Personal · ORP.3 Schulung · ORP.4 Identitätsmanagement · ORP.5 Compliance</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card yellow" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 3 · Prozess</div>
+      <div class="card-de">CON — Konzepte & Vorgehensweisen</div>
+      <div class="card-tr">Konseptler & Yöntemler</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Sicherheitskonzepte und Vorgehensweisen wie Verschlüsselung, Datenschutz, Datensicherung, Softwareentwicklung.</p>
+        <p class="tr"><strong>TR:</strong> Şifreleme, veri koruma, yedekleme ve yazılım geliştirme gibi güvenlik konseptleri ve yöntemleri.</p>
+        <p><strong>Beispiel:</strong> CON.1 Kryptokonzept · CON.2 Datenschutz · CON.3 Datensicherungskonzept</p>
+        <span class="tag tag-sollte">SOLLTE</span>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 4 · Prozess</div>
+      <div class="card-de">OPS — Operativer Betrieb</div>
+      <div class="card-tr">Operasyonel İşletim</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Sicherheitsaspekte des laufenden IT-Betriebs: Patch-Management, Schutz vor Schadsoftware, Telearbeit, Cloud-Nutzung, Outsourcing.</p>
+        <p class="tr"><strong>TR:</strong> Süregelen IT işletiminin güvenlik konuları: Yama yönetimi, zararlı yazılıma karşı koruma, uzaktan çalışma, bulut kullanımı, dış kaynak kullanımı.</p>
+        <p><strong>Beispiel:</strong> OPS.1.1.3 Patch-Management · OPS.1.1.4 Schutz vor Schadprogrammen · OPS.2.2 Cloud</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card green" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 5 · Prozess</div>
+      <div class="card-de">DER — Detektion & Reaktion</div>
+      <div class="card-tr">Tespit & Müdahale</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Überprüfung von Sicherheitsmaßnahmen, Erkennung von Sicherheitsvorfällen und geeignete Reaktionen: Security Incident Management, IT-Forensik, Notfallmanagement.</p>
+        <p class="tr"><strong>TR:</strong> Güvenlik önlemlerinin denetimi, güvenlik olaylarının tespiti ve müdahale: Olay yönetimi, IT adli bilişim, acil durum yönetimi.</p>
+        <p><strong>Beispiel:</strong> DER.2.1 Behandlung von Sicherheitsvorfällen · DER.4 Notfallmanagement</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card yellow" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 6 · System</div>
+      <div class="card-de">APP — Anwendungen & Dienste</div>
+      <div class="card-tr">Uygulamalar & Hizmetler</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Absicherung von Software-Anwendungen: E-Mail, Webbrowser, Office-Produkte, Datenbanken, Webserver, Verzeichnisdienste.</p>
+        <p class="tr"><strong>TR:</strong> Yazılım uygulamalarının güvenliği: E-posta, web tarayıcı, office ürünleri, veritabanları, web sunucuları, dizin hizmetleri.</p>
+        <p><strong>Beispiel:</strong> APP.1.1 Office · APP.1.2 Webbrowser · APP.5.2 Microsoft Exchange</p>
+        <span class="tag tag-sollte">SOLLTE</span>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 7 · System</div>
+      <div class="card-de">SYS — IT-Systeme</div>
+      <div class="card-tr">IT Sistemleri</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Sicherheit einzelner IT-Systeme: Server, Desktop-Systeme, Laptops, Smartphones, Drucker, Betriebssysteme (Windows, Linux, macOS).</p>
+        <p class="tr"><strong>TR:</strong> Bireysel IT sistemlerinin güvenliği: Sunucular, masaüstü sistemler, dizüstü bilgisayarlar, akıllı telefonlar, yazıcılar, işletim sistemleri.</p>
+        <p><strong>Beispiel:</strong> SYS.1.1 Allgemeiner Server · SYS.2.1 Allgemeiner Client · SYS.3.2.1 Smartphones</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card red" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 8 · System</div>
+      <div class="card-de">IND — Industrielle IT (IIoT)</div>
+      <div class="card-tr">Endüstriyel IT / IoT</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Sicherheit industrieller IT-Systeme: Prozessleittechnik, Automatisierung, Industrial Internet of Things (IIoT), speicherprogrammierbare Steuerungen (SPS).</p>
+        <p class="tr"><strong>TR:</strong> Endüstriyel IT sistemlerinin güvenliği: Proses kontrol teknolojisi, otomasyon, endüstriyel IoT, programlanabilir mantık denetleyiciler (PLC).</p>
+        <p><strong>KRITIS-Relevanz:</strong> Energie, Wasser, Produktion, Verkehr</p>
+        <span class="tag tag-muss">MUSS (KRITIS)</span>
+      </div>
+    </div>
+
+    <div class="card green" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 9 · System</div>
+      <div class="card-de">NET — Netzwerke & Kommunikation</div>
+      <div class="card-tr">Ağlar & İletişim</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Netzverbindungen und Kommunikationssicherheit: Firewall, WLAN, VPN, Netzmanagement, Router, Switches.</p>
+        <p class="tr"><strong>TR:</strong> Ağ bağlantıları ve iletişim güvenliği: Güvenlik duvarı, WLAN, VPN, ağ yönetimi, yönlendiriciler, anahtarlar.</p>
+        <p><strong>Beispiel:</strong> NET.1.1 Netzarchitektur · NET.3.2 Firewall · NET.2.1 WLAN-Betrieb</p>
+        <span class="tag tag-muss">MUSS</span>
+      </div>
+    </div>
+
+    <div class="card yellow" onclick="toggleCard(this)">
+      <div class="card-label">Baustein 10 · System</div>
+      <div class="card-de">INF — Infrastruktur</div>
+      <div class="card-tr">Altyapı</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Baulich-technische Sicherheit: Gebäude, Serverraum, Rechenzentrum, Büroarbeitsplatz, häuslicher Arbeitsplatz, Brandschutz, Zutrittsschutz.</p>
+        <p class="tr"><strong>TR:</strong> Yapısal-teknik güvenlik: Bina, sunucu odası, veri merkezi, ofis çalışma alanı, ev çalışma alanı, yangın koruması, erişim koruması.</p>
+        <p><strong>Beispiel:</strong> INF.1 Allgemeines Gebäude · INF.2 Rechenzentrum · INF.7 Büroarbeitsplatz</p>
+        <span class="tag tag-sollte">SOLLTE</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- SCHUTZZIELE -->
+<div class="section" id="schutzziele">
+  <div class="section-title">Schutzziele der Informationssicherheit / Bilgi Güvenliği Koruma Hedefleri</div>
+
+  <div class="cards-grid">
+
+    <div class="card" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent);">
+      <div class="card-label">CIA · Grundwert A</div>
+      <div class="card-de">Verfügbarkeit (Availability)</div>
+      <div class="card-tr">Erişilebilirlik</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Daten und Systeme müssen dann verfügbar sein, wenn sie benötigt werden. Ressourcen und Informationen dürfen nicht verloren gehen.</p>
+        <p class="tr"><strong>TR:</strong> Veriler ve sistemler ihtiyaç duyulduğunda erişilebilir olmalıdır. Kaynaklar ve bilgiler kaybolmamalıdır.</p>
+        <p><strong>Verletzung / İhlal:</strong> Server fällt aus → Kunden können nicht bestellen / Sunucu çöküyor → müşteriler sipariş veremiyor</p>
+        <p><strong>Maßnahmen:</strong> Redundanz, Backup, USV (Unterbrechungsfreie Stromversorgung), RAID</p>
+      </div>
+    </div>
+
+    <div class="card green" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent3);">
+      <div class="card-label">CIA · Grundwert I</div>
+      <div class="card-de">Integrität (Integrity)</div>
+      <div class="card-tr">Bütünlük / Doğruluk</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Daten müssen korrekt, vollständig und unverfälscht sein. Auch Authentizität gehört dazu: Der Kommunikationspartner ist derjenige, der er vorgibt zu sein.</p>
+        <p class="tr"><strong>TR:</strong> Veriler doğru, eksiksiz ve değiştirilmemiş olmalıdır. Özgünlük de buna dahildir: İletişim ortağı iddia ettiği kişidir.</p>
+        <p><strong>Verletzung:</strong> Hacker ändert Überweisungsbetrag / Hacker havale tutarını değiştiriyor</p>
+        <p><strong>Maßnahmen:</strong> Digitale Signaturen, Hashwerte (MD5, SHA), Checksummen</p>
+      </div>
+    </div>
+
+    <div class="card yellow" onclick="toggleCard(this)" style="border-top: 3px solid var(--accent2);">
+      <div class="card-label">CIA · Grundwert C</div>
+      <div class="card-de">Vertraulichkeit (Confidentiality)</div>
+      <div class="card-tr">Gizlilik</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Informationen dürfen nur von autorisierten Personen eingesehen werden. Personenbezogene Daten und Geschäftsgeheimnisse sind besonders schützenswert.</p>
+        <p class="tr"><strong>TR:</strong> Bilgiler yalnızca yetkili kişiler tarafından görüntülenebilir. Kişisel veriler ve ticari sırlar özellikle korunmaya değerdir.</p>
+        <p><strong>Verletzung:</strong> Unbefugter liest Kundendaten / Yetkisiz kişi müşteri verilerini okuyor</p>
+        <p><strong>Maßnahmen:</strong> Verschlüsselung (AES, TLS), Zugriffskontrollen, Need-to-Know-Prinzip</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="toggleCard(this)">
+      <div class="card-label">Erweiterte Schutzziele</div>
+      <div class="card-de">Authentizität · Verbindlichkeit · Zuverlässigkeit</div>
+      <div class="card-tr">Özgünlük · Bağlayıcılık · Güvenilirlik</div>
+      <div class="card-body">
+        <p><strong>Authentizität / Özgünlük:</strong> Partner ist wirklich derjenige, der er vorgibt zu sein → Passwort, Chipkarte, Biometrie / Ortak gerçekten iddia ettiği kişidir</p>
+        <p><strong>Verbindlichkeit / Bağlayıcılık:</strong> Handlungen können nicht geleugnet werden → digitale Signatur / Eylemler inkar edilemez</p>
+        <p><strong>Zuverlässigkeit / Güvenilirlik:</strong> System funktioniert korrekt, Fehlfunktionen werden gemeldet / Sistem doğru çalışır, arızalar bildirilir</p>
+        <p><strong>Nichtabstreitbarkeit / İnkar edilemezlik:</strong> Durchgeführte Aktionen sind nachweisbar / Gerçekleştirilen eylemler kanıtlanabilir</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title" style="margin-top: 28px;">Anforderungsstufen / Gereksinim Seviyeleri</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Stufe / Seviye</th>
+          <th>Almanca</th>
+          <th>Türkçe</th>
+          <th>Modalverb</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="kz">R1 — Basis</span></td>
+          <td class="de-cell">Basisanforderungen — größtmöglicher Nutzen mit geringem Aufwand</td>
+          <td class="tr-cell">Temel gereksinimler — az çabayla maksimum fayda</td>
+          <td><span class="tag tag-muss">MUSS / DARF NICHT</span></td>
+        </tr>
+        <tr>
+          <td><span class="kz">R2 — Standard</span></td>
+          <td class="de-cell">Standardanforderungen — Stand der Technik, normaler Schutzbedarf</td>
+          <td class="tr-cell">Standart gereksinimler — teknolojinin güncel durumu</td>
+          <td><span class="tag tag-sollte">SOLLTE</span></td>
+        </tr>
+        <tr>
+          <td><span class="kz">R3 — Erhöht</span></td>
+          <td class="de-cell">Erhöhter Schutzbedarf — für besonders kritische Systeme</td>
+          <td class="tr-cell">Yüksek koruma gereksinimi — özellikle kritik sistemler için</td>
+          <td><span class="tag tag-sollte">SOLLTE (empfohlen)</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- GEFÄHRDUNGEN -->
+<div class="section" id="gefaehrdungen">
+  <div class="section-title">47 Elementare Gefährdungen / Temel Tehditler</div>
+  <input class="search-bar" type="text" placeholder="Ara / Suchen... (z.B. Feuer, Malware, Social)" oninput="filterGef(this.value)">
+  <div class="gef-list" id="gefList"></div>
+</div>
+
+<!-- GESETZE -->
+<div class="section" id="gesetze">
+  <div class="section-title">Wichtige Gesetze & Standards / Önemli Kanunlar & Standartlar</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Kürzel</th><th>Vollständiger Name</th><th>Türkçe</th><th>Inhalt / İçerik</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="kz">IT-SiG</span></td>
+          <td class="de-cell">IT-Sicherheitsgesetz</td>
+          <td class="tr-cell">IT Güvenlik Kanunu</td>
+          <td class="ex-cell">KRITIS-Unternehmen müssen Sicherheit gewährleisten und Vorfälle an BSI melden / Kritik altyapı şirketleri güvenliği sağlamalı ve olayları BSI'ye bildirmeli</td>
+        </tr>
+        <tr>
+          <td><span class="kz">EU-DSGVO</span></td>
+          <td class="de-cell">Datenschutz-Grundverordnung</td>
+          <td class="tr-cell">AB Veri Koruma Tüzüğü</td>
+          <td class="ex-cell">Schutz personenbezogener Daten in allen EU-Ländern. Bußgeld bis 20 Mio € / Tüm AB'de kişisel veri koruma. 20 milyon Euro'ya kadar ceza</td>
+        </tr>
+        <tr>
+          <td><span class="kz">BDSG</span></td>
+          <td class="de-cell">Bundesdatenschutzgesetz</td>
+          <td class="tr-cell">Federal Veri Koruma Kanunu</td>
+          <td class="ex-cell">Konkretisiert DSGVO für Deutschland. Bei Widerspruch gilt DSGVO / DSGVO'yu Almanya için somutlaştırır. Çelişkide DSGVO önceliklidir</td>
+        </tr>
+        <tr>
+          <td><span class="kz">BSIG</span></td>
+          <td class="de-cell">BSI-Gesetz</td>
+          <td class="tr-cell">BSI Kanunu</td>
+          <td class="ex-cell">Rechtliche Grundlage des BSI. Kritische Unternehmen müssen Systeme alle 2 Jahre prüfen lassen / BSI'nin yasal dayanağı. Kritik şirketler sistemleri 2 yılda bir denetletmeli</td>
+        </tr>
+        <tr>
+          <td><span class="kz">ISO 27001</span></td>
+          <td class="de-cell">IS-Management nach ISO 27001</td>
+          <td class="tr-cell">ISO 27001 Bilgi Güvenliği Standardı</td>
+          <td class="ex-cell">Internationaler Standard zur ISMS-Zertifizierung. 3 Sichten: Governance, Risiko, Compliance / ISMS sertifikasyonu için uluslararası standart</td>
+        </tr>
+        <tr>
+          <td><span class="kz">GSK</span></td>
+          <td class="de-cell">IT-Grundschutz-Kompendium</td>
+          <td class="tr-cell">IT Temel Koruma Rehberi</td>
+          <td class="ex-cell">Jährlich aktualisierter Leitfaden des BSI mit 10 Schichten und 47 Gefährdungen / BSI'nin yıllık güncellenen rehberi, 10 katman ve 47 tehditle</td>
+        </tr>
+        <tr>
+          <td><span class="kz">TKG</span></td>
+          <td class="de-cell">Telekommunikationsgesetz</td>
+          <td class="tr-cell">Telekomünikasyon Kanunu</td>
+          <td class="ex-cell">Telekomanbieter müssen IT-Sicherheitsmaßnahmen einsetzen und Störungen melden / Telekom sağlayıcıları güvenlik önlemleri almalı ve arızaları bildirmeli</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top: 24px;">PDCA-Zyklus (Deming-Zyklus)</div>
+  <div class="cards-grid">
+    <div class="card" onclick="toggleCard(this)">
+      <div class="card-label">Schritt 1</div>
+      <div class="card-de">PLAN — Planen</div>
+      <div class="card-tr">Planla</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Sicherheitsziele festlegen, Risiken analysieren, Maßnahmen planen.</p>
+        <p class="tr"><strong>TR:</strong> Güvenlik hedeflerini belirle, riskleri analiz et, önlemleri planla.</p>
+        <p><strong>Frage:</strong> Was wollen wir schützen? Wie? / Ne koruyacağız? Nasıl?</p>
+      </div>
+    </div>
+    <div class="card green" onclick="toggleCard(this)">
+      <div class="card-label">Schritt 2</div>
+      <div class="card-de">DO — Ausführen</div>
+      <div class="card-tr">Uygula</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Geplante Maßnahmen umsetzen: Firewall installieren, Schulungen durchführen, Prozesse einführen.</p>
+        <p class="tr"><strong>TR:</strong> Planlanan önlemleri uygula: Firewall kur, eğitimler yap, süreçleri başlat.</p>
+      </div>
+    </div>
+    <div class="card yellow" onclick="toggleCard(this)">
+      <div class="card-label">Schritt 3</div>
+      <div class="card-de">CHECK — Prüfen</div>
+      <div class="card-tr">Kontrol Et</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Wirksamkeit der Maßnahmen überprüfen: Audits, Penetrationstests, Sicherheitsüberprüfungen.</p>
+        <p class="tr"><strong>TR:</strong> Önlemlerin etkinliğini kontrol et: Denetimler, sızma testleri, güvenlik incelemeleri.</p>
+      </div>
+    </div>
+    <div class="card red" onclick="toggleCard(this)">
+      <div class="card-label">Schritt 4</div>
+      <div class="card-de">ACT — Handeln</div>
+      <div class="card-tr">Önlem Al → Tekrar PLAN</div>
+      <div class="card-body">
+        <p><strong>DE:</strong> Probleme beheben, Maßnahmen verbessern, Zyklus beginnt von vorne. Kontinuierlicher Verbesserungsprozess (KVP).</p>
+        <p class="tr"><strong>TR:</strong> Sorunları düzelt, önlemleri iyileştir, döngü baştan başlar. Sürekli iyileştirme süreci.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 14 GEBOTE -->
+<div class="section" id="gebote">
+  <div class="section-title">14 Gebote für Datensicherheit und Datenschutz (§64 BDSG)</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Nr.</th><th>Gebot (DE)</th><th>Türkçe</th><th>Beispiel / Örnek</th></tr>
+      </thead>
+      <tbody id="gebotsTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="section" id="quiz">
+  <div class="quiz-box" id="quizBox">
+    <div class="quiz-progress" id="quizProgress">Frage 1 von 15</div>
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="quiz-question" id="quizQuestion"></div>
+    <div class="quiz-hint" id="quizHint"></div>
+    <div class="quiz-options" id="quizOptions"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <button class="btn" id="nextBtn" style="display:none" onclick="nextQuestion()">Weiter →</button>
+  </div>
+  <div id="scoreBox" style="display:none" class="quiz-box score-box">
+    <div class="score-big" id="scoreBig"></div>
+    <div class="score-label">Punkte erzielt / Puan kazanıldı</div>
+    <br>
+    <p id="scoreMsg" style="color: var(--muted); font-size:0.85rem;"></p>
+    <br>
+    <button class="btn" onclick="restartQuiz()">Nochmal versuchen / Tekrar dene</button>
+  </div>
+</div>
+
+<script>
+// ---- DATA ----
+
+const gefaehrdungen = [
+  ["G 0.1","Feuer","Yangın"],
+  ["G 0.2","Ungünstige klimatische Bedingungen","Olumsuz iklim koşulları"],
+  ["G 0.3","Wasser","Su hasarı"],
+  ["G 0.4","Verschmutzung, Staub, Korrosion","Kirlilik, toz, korozyon"],
+  ["G 0.5","Naturkatastrophen","Doğal afetler"],
+  ["G 0.6","Katastrophen im Umfeld","Çevredeki felaketler"],
+  ["G 0.7","Großereignisse im Umfeld","Çevredeki büyük olaylar"],
+  ["G 0.8","Ausfall oder Störung der Stromversorgung","Elektrik kesintisi veya arızası"],
+  ["G 0.9","Ausfall oder Störung von Kommunikationsnetzen","İletişim ağı kesintisi"],
+  ["G 0.10","Ausfall oder Störung von Versorgungsnetzen","Altyapı ağı kesintisi"],
+  ["G 0.11","Ausfall oder Störung von Dienstleistungsunternehmen","Hizmet sağlayıcı kesintisi"],
+  ["G 0.12","Elektromagnetische Störstrahlung","Elektromanyetik parazit"],
+  ["G 0.13","Abfangen kompromittierender Strahlung","Tehlikeli radyasyonun ele geçirilmesi"],
+  ["G 0.14","Ausspähen von Informationen (Spionage)","Bilgi casusluğu"],
+  ["G 0.15","Abhören","Dinleme"],
+  ["G 0.16","Diebstahl von Geräten, Datenträgern oder Dokumenten","Cihaz/veri taşıyıcı/belge hırsızlığı"],
+  ["G 0.17","Verlust von Geräten, Datenträgern oder Dokumenten","Cihaz/veri taşıyıcı/belge kaybı"],
+  ["G 0.18","Fehlplanung oder fehlende Anpassung","Hatalı planlama veya yetersiz uyum"],
+  ["G 0.19","Offenlegung schützenswerter Informationen","Korunan bilgilerin ifşası"],
+  ["G 0.20","Informationen aus unzuverlässiger Quelle","Güvenilmez kaynaktan bilgi"],
+  ["G 0.21","Manipulation von Hard- oder Software","Donanım/yazılım manipülasyonu"],
+  ["G 0.22","Manipulation von Informationen","Bilgi manipülasyonu"],
+  ["G 0.23","Unbefugtes Eindringen in IT-Systeme","IT sistemlerine yetkisiz giriş"],
+  ["G 0.24","Zerstörung von Geräten oder Datenträgern","Cihaz/veri taşıyıcı tahribatı"],
+  ["G 0.25","Ausfall von Geräten oder Systemen","Cihaz/sistem arızası"],
+  ["G 0.26","Fehlfunktion von Geräten oder Systemen","Cihaz/sistem hatalı işleyişi"],
+  ["G 0.27","Ressourcenmangel","Kaynak yetersizliği"],
+  ["G 0.28","Software-Schwachstellen oder -Fehler","Yazılım açıkları veya hataları"],
+  ["G 0.29","Verstoß gegen Gesetze oder Regelungen","Kanun veya yönetmeliklere aykırılık"],
+  ["G 0.30","Unberechtigte Nutzung oder Administration","Yetkisiz kullanım veya yönetim"],
+  ["G 0.31","Fehlerhafte Nutzung oder Administration","Hatalı kullanım veya yönetim"],
+  ["G 0.32","Missbrauch von Berechtigungen","Yetki kötüye kullanımı"],
+  ["G 0.33","Personalausfall","Personel devamsızlığı"],
+  ["G 0.34","Anschlag","Saldırı/sabotaj"],
+  ["G 0.35","Nötigung, Erpressung oder Korruption","Zorlama, şantaj veya yolsuzluk"],
+  ["G 0.36","Identitätsdiebstahl","Kimlik hırsızlığı"],
+  ["G 0.37","Abstreiten von Handlungen","Eylemleri inkar etme"],
+  ["G 0.38","Missbrauch personenbezogener Daten","Kişisel veri kötüye kullanımı"],
+  ["G 0.39","Schadprogramme","Zararlı yazılımlar (Malware)"],
+  ["G 0.40","Verhinderung von Diensten (Denial of Service)","Hizmet engelleme (DoS/DDoS)"],
+  ["G 0.41","Sabotage","Sabotaj"],
+  ["G 0.42","Social Engineering","Sosyal mühendislik"],
+  ["G 0.43","Einspielen von Nachrichten","Mesaj enjeksiyonu (Spoofing)"],
+  ["G 0.44","Unbefugtes Eindringen in Räumlichkeiten","Mekanlara yetkisiz giriş"],
+  ["G 0.45","Datenverlust","Veri kaybı"],
+  ["G 0.46","Integritätsverlust schützenswerter Informationen","Korunan bilgilerin bütünlük kaybı"],
+  ["G 0.47","Schädliche Seiteneffekte IT-gestützter Angriffe","IT saldırılarının zararlı yan etkileri"]
+];
+
+const gebote = [
+  ["1","Zugangskontrolle","Erişim kontrolü","Serverraum nur mit Schlüssel / Sunucu odasına sadece anahtarla giriş"],
+  ["2","Datenträgerkontrolle","Veri taşıyıcı kontrolü","USB-Ports gesperrt / USB portları kapalı"],
+  ["3","Speicherkontrolle","Depolama kontrolü","Keine unbefugte Dateneingabe / Yetkisiz veri girişi yok"],
+  ["4","Benutzerkontrolle","Kullanıcı kontrolü","Kein unberechtigter Datentransfer / Yetkisiz veri transferi yok"],
+  ["5","Zugriffskontrolle","Erişim yetki kontrolü","Nur Berechtigte sehen Kundendaten / Sadece yetkililer müşteri verilerini görür"],
+  ["6","Übertragungskontrolle","İletim kontrolü","Log: Wer hat Daten wohin gesendet? / Kim veriti nereye gönderdi?"],
+  ["7","Eingabekontrolle","Giriş kontrolü","Wer hat wann welche Daten eingegeben? / Kim ne zaman hangi verileri girdi?"],
+  ["8","Transportkontrolle","Taşıma kontrolü","Verschlüsselung bei Übertragung / İletim sırasında şifreleme"],
+  ["9","Wiederherstellbarkeit","Geri yükleme","Backup → System nach Ausfall wiederherstellbar / Arızadan sonra sistem geri yüklenebilir"],
+  ["10","Zuverlässigkeit","Güvenilirlik","Fehlfunktionen werden gemeldet / Arızalar raporlanır"],
+  ["11","Datenintegrität","Veri bütünlüğü","Daten durch Systemfehler nicht beschädigt / Sistem hatası veriye zarar vermez"],
+  ["12","Auftragskontrolle","Sipariş/görev kontrolü","Auftragsverarbeiter folgen nur Weisungen / Dış işlemciler sadece talimata uyar"],
+  ["13","Verfügbarkeitskontrolle","Erişilebilirlik kontrolü","Daten gegen Zerstörung/Verlust schützen / Veriler yok olmaya/kaybolmaya karşı korunur"],
+  ["14","Trennbarkeit","Ayrıştırılabilirlik","Daten verschiedener Zwecke getrennt verarbeiten / Farklı amaçlar için veriler ayrı işlenir"]
+];
+
+const quizQuestions = [
+  {
+    q: "Was bedeutet die Abkürzung CIA in der Informationssicherheit?\nBilgi güvenliğinde CIA kısaltması ne anlama gelir?",
+    hint: "3 Grundwerte / 3 temel değer",
+    options: [
+      "Central Intelligence Agency",
+      "Confidentiality, Integrity, Availability — Vertraulichkeit, Integrität, Verfügbarkeit",
+      "Control, Identification, Authentication",
+      "Cyber, Infrastructure, Administration"
+    ],
+    correct: 1,
+    explanation: "CIA = Vertraulichkeit (Confidentiality) + Integrität (Integrity) + Verfügbarkeit (Availability). Das sind die 3 Grundwerte der Informationssicherheit nach BSI.\nTR: CIA = Gizlilik + Bütünlük + Erişilebilirlik. BSI'ye göre bilgi güvenliğinin 3 temel değeridir."
+  },
+  {
+    q: "Welches Modalverb wird für Basis-Anforderungen (R1) im IT-Grundschutz verwendet?\nIT-Grundschutz'ta temel gereksinimler (R1) için hangi modal fiil kullanılır?",
+    hint: "Unbedingt erfüllen / Kesinlikle yerine getirilmeli",
+    options: ["SOLLTE", "KANN", "MUSS / DARF NICHT", "EMPFOHLEN"],
+    correct: 2,
+    explanation: "Basis-Anforderungen (R1) verwenden MUSS/DARF NICHT — sie sind unbedingt zu erfüllen, keine Risikoübernahme möglich.\nTR: Temel gereksinimler (R1) MUSS/DARF NICHT kullanır — kesinlikle yerine getirilmeli, risk üstlenmek mümkün değil."
+  },
+  {
+    q: "Welchem Baustein gehört das Thema 'Patch-Management' im IT-Grundschutz?\n'Yama yönetimi' IT-Grundschutz'ta hangi yapı taşına aittir?",
+    hint: "Operativer Betrieb / Operasyonel İşletim",
+    options: ["ISMS", "CON — Konzepte", "OPS — Operativer Betrieb", "SYS — IT-Systeme"],
+    correct: 2,
+    explanation: "Patch-Management gehört zu OPS (Operativer Betrieb), speziell OPS.1.1.3. OPS umfasst alle operativen IT-Betriebsaspekte.\nTR: Yama yönetimi OPS'a (Operasyonel İşletim) aittir, özellikle OPS.1.1.3. OPS tüm operasyonel IT işletim konularını kapsar."
+  },
+  {
+    q: "Was ist ein ISMS?\nISMS nedir?",
+    hint: "Informationssicherheits-...",
+    options: [
+      "Internet Security Management Software",
+      "Informationssicherheitsmanagementsystem / Bilgi güvenliği yönetim sistemi",
+      "Integriertes Sicherheits-Mess-System",
+      "IT-Sicherheits-Melde-Standard"
+    ],
+    correct: 1,
+    explanation: "ISMS = Informationssicherheitsmanagementsystem. Es definiert Verfahren und Regeln zur Steuerung, Kontrolle und Optimierung der Informationssicherheit. Grundlage: ISO 27001.\nTR: ISMS = Bilgi güvenliği yönetim sistemi. Bilgi güvenliğini yönetmek, denetlemek ve optimize etmek için kural ve prosedürleri tanımlar."
+  },
+  {
+    q: "Ein Hacker verändert Überweisungsbeträge in der Bankdatenbank. Welches Schutzziel ist verletzt?\nBir hacker banka veri tabanındaki havale tutarlarını değiştiriyor. Hangi koruma hedefi ihlal edilmiştir?",
+    hint: "Daten korrekt und unverfälscht / Veriler doğru ve değiştirilmemiş",
+    options: ["Verfügbarkeit (Availability)", "Vertraulichkeit (Confidentiality)", "Integrität (Integrity)", "Authentizität"],
+    correct: 2,
+    explanation: "Integrität (Integrity) ist verletzt, wenn Daten verändert oder verfälscht werden. Authentizität ist ein Teilaspekt davon.\nTR: Veriler değiştirildiğinde Bütünlük (Integrity) ihlal edilir. Özgünlük bunun bir alt yönüdür."
+  },
+  {
+    q: "Für welche Unternehmen gilt das IT-Sicherheitsgesetz (IT-SiG) hauptsächlich?\nIT Güvenlik Kanunu (IT-SiG) ağırlıklı olarak hangi şirketler için geçerlidir?",
+    hint: "KRITIS = Kritische Infrastruktur",
+    options: [
+      "Alle Unternehmen ab 10 Mitarbeitern / 10'dan fazla çalışanı olan tüm şirketler",
+      "Nur öffentliche Behörden / Sadece kamu kurumları",
+      "Unternehmen mit kritischer IT-Infrastruktur (KRITIS) / Kritik IT altyapısına sahip şirketler",
+      "Nur internationale Konzerne / Sadece uluslararası şirketler"
+    ],
+    correct: 2,
+    explanation: "IT-SiG gilt für Unternehmen mit kritischer IT-Infrastruktur (KRITIS): Energie, Wasser, Gesundheit, Telekommunikation, Finanzen, Transport. Kleine Online-Shops sind NICHT betroffen.\nTR: IT-SiG, kritik IT altyapısına sahip şirketler için geçerlidir: Enerji, su, sağlık, telekomünikasyon, finans, ulaşım. Küçük online mağazalar kapsam dışıdır."
+  },
+  {
+    q: "Was regelt Art. 32 DSGVO?\nDSGVO Madde 32 ne düzenler?",
+    hint: "Technische und organisatorische Maßnahmen / Teknik ve organizasyonel önlemler",
+    options: [
+      "Bußgelder bei Verstößen / İhlallerde para cezaları",
+      "Rechte der Betroffenen / Veri sahiplerinin hakları",
+      "Technische und organisatorische Maßnahmen (TOM) zur Datensicherheit / Veri güvenliği için teknik ve organizasyonel önlemler",
+      "Pflicht zur Datenschutzfolgenabschätzung / Veri koruma etki değerlendirmesi zorunluluğu"
+    ],
+    correct: 2,
+    explanation: "Art. 32 DSGVO verpflichtet zu geeigneten TOM: Pseudonymisierung, Verschlüsselung, Verfügbarkeit, Integrität, Vertraulichkeit, Wiederherstellung und regelmäßige Überprüfung.\nTR: DSGVO Madde 32, uygun TOM almayı zorunlu kılar: Takma ad, şifreleme, erişilebilirlik, bütünlük, gizlilik, geri yükleme ve düzenli denetim."
+  },
+  {
+    q: "Welches Gebot (§64 BDSG) stellt sicher, dass nur Berechtigte Zugang zu den Verarbeitungsanlagen haben?\nHangi emir (§64 BDSG) yalnızca yetkililerin işleme tesislerine erişimini sağlar?",
+    hint: "Nummer 1 / 1. madde",
+    options: ["Benutzerkontrolle", "Zugangskontrolle", "Zugriffskontrolle", "Speicherkontrolle"],
+    correct: 1,
+    explanation: "Zugangskontrolle (Gebot 1) = Verwehrung des Zugangs zu Verarbeitungsanlagen (physischer Zutritt). Zugriffskontrolle (Gebot 5) = nur Berechtigte sehen ihre Daten.\nTR: Erişim kontrolü (1. madde) = işleme tesislerine fiziksel girişin engellenmesi. Yetki kontrolü (5. madde) = sadece yetkililer verilerini görür."
+  },
+  {
+    q: "Was bedeutet 'Zweckbindung' im Sinne der DSGVO?\nDSGVO kapsamında 'Zweckbindung' ne anlama gelir?",
+    hint: "Warum wurden die Daten erhoben? / Veriler neden toplandı?",
+    options: [
+      "Daten müssen verschlüsselt werden / Veriler şifrelenmeli",
+      "Daten dürfen nur für den festgelegten Zweck verwendet werden / Veriler yalnızca belirlenen amaç için kullanılabilir",
+      "Daten müssen gelöscht werden / Veriler silinmeli",
+      "Daten dürfen nicht gespeichert werden / Veriler saklanamaz"
+    ],
+    correct: 1,
+    explanation: "Zweckbindung (Art. 5 DSGVO): Daten dürfen nur für den Zweck verwendet werden, für den sie erhoben wurden. Kundendaten für Werbung anderer Firmen → VERBOTEN!\nTR: Amaç bağlılığı (DSGVO Madde 5): Veriler yalnızca toplandıkları amaç için kullanılabilir. Başka şirketlerin reklamı için müşteri verisi → YASAK!"
+  },
+  {
+    q: "Was ist der PDCA-Zyklus?\nPDCA döngüsü nedir?",
+    hint: "Kontinuierliche Verbesserung / Sürekli iyileştirme",
+    options: [
+      "Ein Verschlüsselungsprotokoll / Bir şifreleme protokolü",
+      "Plan-Do-Check-Act: Kontinuierlicher Verbesserungsprozess der IT-Sicherheit / Sürekli iyileştirme süreci",
+      "Ein Lizenzmodell für Software / Yazılım lisans modeli",
+      "Eine Zertifizierung nach ISO / ISO'ya göre sertifikasyon"
+    ],
+    correct: 1,
+    explanation: "PDCA (Deming-Zyklus): Plan (Planla) → Do (Uygula) → Check (Kontrol et) → Act (Önlem al) → wieder Plan. Sichert kontinuierliche Verbesserung der IT-Sicherheit.\nTR: PDCA: Planla → Uygula → Kontrol et → Önlem al → tekrar Planla. IT güvenliğinin sürekli iyileştirilmesini sağlar."
+  },
+  {
+    q: "Ein Server fällt wegen eines Stromausfalls aus. Welches Schutzziel ist verletzt?\nElektrik kesintisi nedeniyle sunucu çöküyor. Hangi koruma hedefi ihlal edilmiştir?",
+    hint: "System nicht erreichbar / Sisteme erişilemiyor",
+    options: ["Integrität", "Vertraulichkeit", "Authentizität", "Verfügbarkeit"],
+    correct: 3,
+    explanation: "Verfügbarkeit (Availability) ist verletzt, wenn Systeme oder Daten nicht zugänglich sind. Maßnahmen: USV, Redundanz, Backup-Systeme.\nTR: Sisteme veya verilere erişilemediğinde Erişilebilirlik (Availability) ihlal edilir. Önlemler: kesintisiz güç kaynağı, yedeklilik, yedekleme sistemleri."
+  },
+  {
+    q: "Welche Schicht des IT-Grundschutzes behandelt Brandschutz und Gebäudesicherheit?\nIT-Grundschutz'un hangi katmanı yangın koruması ve bina güvenliğini ele alır?",
+    hint: "Baulich-technische Sicherheit / Yapısal-teknik güvenlik",
+    options: ["OPS", "NET", "INF — Infrastruktur", "SYS"],
+    correct: 2,
+    explanation: "INF (Infrastruktur) behandelt baulich-technische Sicherheit: Gebäude, Serverraum, Rechenzentrum, Brandschutz, Zutrittsschutz.\nTR: INF (Altyapı), yapısal-teknik güvenliği ele alır: Bina, sunucu odası, veri merkezi, yangın koruması, erişim koruması."
+  },
+  {
+    q: "Was ist ein 'Datenschutzbeauftragter' und wann muss er bestellt werden?\n'Veri koruma sorumlusu' nedir ve ne zaman atanmalıdır?",
+    hint: "Art. 37 DSGVO / §38 BDSG",
+    options: [
+      "Nur in Behörden pflicht / Sadece kamu kurumlarında zorunlu",
+      "Ab 50 Mitarbeitern pflicht / 50 çalışandan itibaren zorunlu",
+      "Ab 20 Personen die ständig mit personenbezogenen Daten arbeiten / 20 kişi sürekli kişisel veriyle çalışıyorsa",
+      "Immer freiwillig / Her zaman gönüllü"
+    ],
+    correct: 2,
+    explanation: "DSB muss bestellt werden wenn: mind. 20 Personen ständig automatisiert personenbezogene Daten verarbeiten (Art. 37 DSGVO, §38 BDSG). Auch bei besonders sensiblen Daten unabhängig von Personenzahl.\nTR: DSB şu durumlarda atanmalıdır: En az 20 kişi sürekli olarak otomatik kişisel veri işliyorsa. Özellikle hassas veriler söz konusuysa kişi sayısından bağımsız."
+  },
+  {
+    q: "G 0.39 ist eine der 47 elementaren Gefährdungen. Worum handelt es sich?\nG 0.39, 47 temel tehditten biridir. Ne hakkındadır?",
+    hint: "Malware / Virüs / Trojaner",
+    options: ["Datenverlust / Veri kaybı", "Social Engineering", "Schadprogramme / Zararlı yazılımlar (Malware)", "Denial of Service"],
+    correct: 2,
+    explanation: "G 0.39 = Schadprogramme (Malware): Viren, Trojaner, Ransomware, Würmer. Eine der kritischsten elementaren Gefährdungen.\nTR: G 0.39 = Zararlı yazılımlar (Malware): Virüsler, Truva atları, fidye yazılımları, solucanlar. En kritik temel tehditlerden biri."
+  },
+  {
+    q: "Was versteht man unter 'Social Engineering' (G 0.42)?\n'Sosyal mühendislik' (G 0.42) ile ne anlaşılır?",
+    hint: "Menschliche Schwächen ausnutzen / İnsan zayıflıklarını istismar",
+    options: [
+      "Technischer Angriff auf Software / Yazılıma teknik saldırı",
+      "Manipulation von Menschen, um an Informationen zu gelangen / Bilgi edinmek için insanları manipüle etme",
+      "Ausfall von IT-Systemen / IT sistemlerinin çökmesi",
+      "Diebstahl von Hardware / Donanım hırsızlığı"
+    ],
+    correct: 1,
+    explanation: "Social Engineering (G 0.42) = Manipulation von Menschen durch Täuschung, um Zugang zu Informationen oder Systemen zu erhalten. Beispiel: Phishing-Mail, falscher IT-Support anruft.\nTR: Sosyal mühendislik = Bilgi veya sistemlere erişim sağlamak için insanları aldatarak manipüle etme. Örnek: kimlik avı e-postası, sahte IT desteği araması."
+  }
+];
+
+// ---- RENDER ----
+
+function renderGef(filter='') {
+  const f = filter.toLowerCase();
+  const html = gefaehrdungen
+    .filter(g => g[0].toLowerCase().includes(f) || g[1].toLowerCase().includes(f) || g[2].toLowerCase().includes(f))
+    .map(g => `
+      <div class="gef-item">
+        <div class="gef-num">${g[0]}</div>
+        <div>
+          <div class="gef-de">${g[1]}</div>
+          <div class="gef-tr">${g[2]}</div>
+        </div>
+      </div>
+    `).join('');
+  document.getElementById('gefList').innerHTML = html;
+}
+
+function filterGef(val) { renderGef(val); }
+
+function renderGebote() {
+  const rows = gebote.map(g => `
+    <tr>
+      <td><span class="kz">${g[0]}</span></td>
+      <td class="de-cell"><strong>${g[1]}</strong></td>
+      <td class="tr-cell">${g[2]}</td>
+      <td class="ex-cell">${g[3]}</td>
+    </tr>
+  `).join('');
+  document.getElementById('gebotsTable').innerHTML = rows;
+}
+
+// ---- QUIZ ----
+let qIdx = 0, score = 0;
+const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
+
+function renderQuestion() {
+  const q = shuffled[qIdx];
+  document.getElementById('quizProgress').textContent = `Frage ${qIdx+1} von ${shuffled.length} / Soru ${qIdx+1}/${shuffled.length}`;
+  document.getElementById('progressFill').style.width = `${(qIdx/shuffled.length)*100}%`;
+  document.getElementById('quizQuestion').textContent = q.q;
+  document.getElementById('quizHint').textContent = `💡 ${q.hint}`;
+  document.getElementById('quizFeedback').className = 'quiz-feedback';
+  document.getElementById('nextBtn').style.display = 'none';
+
+  const opts = document.getElementById('quizOptions');
+  opts.innerHTML = q.options.map((o,i) => `
+    <button class="quiz-option" onclick="selectOption(${i})">${o}</button>
+  `).join('');
+}
+
+function selectOption(i) {
+  const q = shuffled[qIdx];
+  const btns = document.querySelectorAll('.quiz-option');
+  btns.forEach(b => b.disabled = true);
+
+  const fb = document.getElementById('quizFeedback');
+  if (i === q.correct) {
+    btns[i].classList.add('correct');
+    score++;
+    fb.className = 'quiz-feedback show ok';
+    fb.innerHTML = `✅ Richtig! / Doğru!<br><br>${q.explanation}`;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.correct].classList.add('correct');
+    fb.className = 'quiz-feedback show fail';
+    fb.innerHTML = `❌ Falsch / Yanlış<br><br>${q.explanation}`;
+  }
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  qIdx++;
+  if (qIdx >= shuffled.length) {
+    showScore();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showScore() {
+  document.getElementById('quizBox').style.display = 'none';
+  document.getElementById('scoreBox').style.display = 'block';
+  const pct = Math.round((score/shuffled.length)*100);
+  document.getElementById('scoreBig').textContent = `${score}/${shuffled.length}`;
+  let msg = '';
+  if (pct >= 80) msg = '🎉 Ausgezeichnet! Sehr gut vorbereitet! / Mükemmel! Çok iyi hazırlanmışsın!';
+  else if (pct >= 60) msg = '👍 Gut! Noch etwas wiederholen. / İyi! Biraz daha tekrar et.';
+  else msg = '📚 Weiter üben! Nochmal durchlesen. / Daha fazla çalış! Tekrar oku.';
+  document.getElementById('scoreMsg').textContent = `${pct}% — ${msg}`;
+}
+
+function restartQuiz() {
+  qIdx = 0; score = 0;
+  shuffled.sort(() => Math.random() - 0.5);
+  document.getElementById('quizBox').style.display = 'block';
+  document.getElementById('scoreBox').style.display = 'none';
+  renderQuestion();
+}
+
+// ---- TABS ----
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleCard(el) {
+  el.classList.toggle('expanded');
+}
+
+// ---- INIT ----
+renderGef();
+renderGebote();
+renderQuestion();
+</script>
+</body>
+</html>

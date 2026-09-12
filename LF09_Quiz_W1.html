@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netzwerktechnik Quiz | Prüfungsvorbereitung</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap');
+  :root{--bg:#f0f2f5;--card:#fff;--card2:#f5f6f8;--border:#dde0e8;--text:#1a1d27;--dim:#6b7080;--accent:#0d3b66;--accent2:#3a86c1;--red:#e74c3c;--green:#27ae60;--orange:#e67e22;--blue:#2980b9;--purple:#8e44ad;--teal:#16a085}
+  body.dark{--bg:#0f1117;--card:#1a1d27;--card2:#222633;--border:#2d3244;--text:#e8eaf0;--dim:#8b90a0;--accent:#74c0fc;--accent2:#3a86c1;--red:#ff6b6b;--green:#51cf66;--orange:#ffa94d;--blue:#74c0fc;--purple:#b197fc;--teal:#38d9a9}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+  .container{max-width:720px;margin:0 auto;padding:24px 16px}
+  .hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+  .hdr h1{font-size:20px;font-weight:800;color:var(--accent)}
+  .hdr-r{display:flex;align-items:center;gap:8px}
+  .pill{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--dim)}
+  .pill b{color:var(--green)}
+  .tbtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+  .tbtn:hover{border-color:var(--accent)}
+  .sub{font-size:10px;color:var(--dim);margin-top:2px;line-height:1.3}
+  .progress{margin-bottom:16px}
+  .p-info{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:4px}
+  .p-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+  .p-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .3s}
+  .dots{display:flex;gap:2px;margin-top:6px;flex-wrap:wrap}
+  .dot{width:18px;height:18px;border-radius:3px;border:1px solid var(--border);background:var(--card);color:var(--dim);font-size:7px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .1s}
+  .dot.a{border:2px solid var(--accent);background:rgba(13,59,102,.08);color:var(--accent)}
+  .dot.c{background:var(--green);color:#fff;border-color:var(--green)}
+  .dot.w{background:var(--red);color:#fff;border-color:var(--red)}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);overflow:hidden;margin-bottom:14px;transition:background .3s,border-color .3s}
+  .c-hdr{padding:14px 18px;border-bottom:1px solid var(--border)}
+  .badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:9px;font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+  .c-hdr h2{font-size:15px;font-weight:700;line-height:1.4}
+  .c-body{padding:10px 18px 18px}
+  .opt{width:100%;padding:11px 13px;margin-bottom:6px;border-radius:8px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:left;font-size:13px;color:var(--text);display:flex;align-items:center;gap:10px;transition:all .12s;font-family:inherit}
+  .opt:hover:not(.d){border-color:var(--accent2);background:rgba(58,134,193,.04)}
+  .opt.s{border-color:var(--accent2);font-weight:600}
+  .opt.d{cursor:default}
+  .opt.cs{background:rgba(39,174,96,.08);border-color:var(--green)}
+  .opt.cm{background:rgba(255,169,77,.08);border-color:var(--orange)}
+  .opt.ws{background:rgba(231,76,60,.08);border-color:var(--red)}
+  .opt.dm{background:var(--card2);border-color:var(--border);color:var(--dim)}
+  .ind{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+  .ind.s{border-color:var(--accent2);background:var(--accent2)}
+  .ind.c{border-color:var(--green);background:var(--green)}
+  .ind.w{border-color:var(--red);background:var(--red)}
+  .ind.m{border-color:var(--orange)}
+  .ol{flex:1}.ot{margin-left:auto;font-size:10px;font-weight:700;white-space:nowrap}
+  .ot.r{color:var(--green)}.ot.wr{color:var(--red)}.ot.mi{color:var(--orange)}
+  .exp{margin:0 18px 18px;padding:12px 14px;border-radius:8px;font-size:12px;line-height:1.5}
+  .exp.ri{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.25);color:var(--green)}
+  .exp.pa{background:rgba(255,169,77,.08);border:1px solid rgba(255,169,77,.25)}
+  .exp b{display:block;margin-bottom:4px}
+  .exp .et{color:var(--dim)}
+  .actions{display:flex;gap:8px;margin-bottom:14px}
+  .btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .12s}
+  .btn:disabled{opacity:.4;cursor:default}
+  .b1{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;flex:2}
+  .b2{background:var(--card);color:var(--orange);border:1px solid var(--border)}
+  .b3{background:var(--card);color:var(--blue);border:1px solid var(--border)}
+  .b4{background:var(--card);color:var(--dim);border:1px solid var(--border)}
+  .bd{background:var(--border);color:var(--dim);flex:2}
+  .rh{text-align:center;padding:32px 20px;border-radius:14px;color:#fff;margin-bottom:20px;background:linear-gradient(135deg,#0d3b66,#3a86c1)}
+  body.dark .rh{background:linear-gradient(135deg,#1a1d27,#2e4057)}
+  .rh .em{font-size:48px;margin-bottom:4px}
+  .rh .gr{font-size:24px;font-weight:700}
+  .rh .sc{font-size:40px;font-weight:800;margin:8px 0}
+  .rh .pc{font-size:14px;opacity:.9}
+  .rb{margin-top:16px;height:7px;background:rgba(255,255,255,.2);border-radius:4px;overflow:hidden}
+  .rb div{height:100%;background:#fff;border-radius:4px;transition:width 1s}
+  .rr{padding:9px 12px;margin-bottom:4px;border-radius:8px;display:flex;align-items:center;gap:8px;border:1px solid;font-size:11px}
+  .rr.rc{background:rgba(39,174,96,.06);border-color:var(--green)}
+  .rr.rw{background:rgba(231,76,60,.06);border-color:var(--red)}
+  .rr.ru{background:var(--card2);border-color:var(--border)}
+  .ri2{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:10px;flex-shrink:0}
+  .ri2.rc{background:var(--green)}.ri2.rw{background:var(--red)}.ri2.ru{background:var(--dim)}
+  /* menu styles */
+  .menu-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 28px;text-align:center;margin-bottom:16px}
+  .menu-card h1{font-size:24px;font-weight:800;color:var(--accent);margin-bottom:4px}
+  .menu-sub{font-size:12px;color:var(--dim);margin-bottom:28px}
+  .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+  .menu-btn{padding:16px;border:2px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-family:inherit;font-size:15px;font-weight:700;color:var(--text);transition:all .15s}
+  .menu-btn:hover{border-color:var(--accent);background:rgba(13,59,102,.04)}
+  .menu-btn.all{grid-column:1/-1;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;font-size:16px}
+  .menu-btn.all:hover{opacity:.9}
+  .menu-btn span{display:block;font-size:11px;font-weight:500;color:var(--dim);margin-top:2px}
+  .menu-btn.all span{color:rgba(255,255,255,.7)}
+  .menu-topics{background:var(--card2);border-radius:10px;padding:14px;margin-top:16px}
+  .menu-topics p{font-size:11px;color:var(--dim);line-height:1.6}
+  /* topic colors */
+  .t-vk{background:rgba(41,128,185,.12);color:var(--blue)}
+  .t-eth{background:rgba(142,68,173,.12);color:var(--purple)}
+  .t-osi{background:rgba(13,59,102,.12);color:var(--accent)}
+  .t-sw{background:rgba(22,160,133,.12);color:var(--teal)}
+  .t-stp{background:rgba(230,126,34,.12);color:var(--orange)}
+  .t-vlan{background:rgba(39,174,96,.12);color:var(--green)}
+  .t-rt{background:rgba(231,76,60,.12);color:var(--red)}
+  .t-arp{background:rgba(41,128,185,.12);color:var(--blue)}
+  .t-qos{background:rgba(142,68,173,.12);color:var(--purple)}
+  .t-ip{background:rgba(230,126,34,.12);color:var(--orange)}
+  .t-sec{background:rgba(231,76,60,.12);color:var(--red)}
+  .t-iot{background:rgba(22,160,133,.12);color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="container" id="app"></div>
+<script>
+const ALL_Q=[
+// ===== STRUKTURIERTE VERKABELUNG =====
+{id:1,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Was ist die Primärverkabelung?",o:["Etagenverkabelung vom Etagenverteiler zu den Anschlussdosen","Geländeverkabelung vom Standortverteiler zu den Gebäuden","Verbindung vom PC zum Switch","Verbindung zwischen zwei Routern im WAN"],c:1,e:"Die Primärverkabelung (Campusverkabelung) verbindet die Gebäude auf einem Gelände. Sie verläuft vom Standortverteiler (SV) zum Gebäudeverteiler (GV) und nutzt meist Glasfaser wegen der großen Entfernungen."},
+{id:2,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Was ist die Sekundärverkabelung?",o:["Geländeverkabelung zwischen Gebäuden","Gebäudeverkabelung vom Gebäudeverteiler zu den Etagenverteilern","Verbindung vom Router ins Internet","Verkabelung innerhalb eines Serverracks"],c:1,e:"Die Sekundärverkabelung (Steigbereichsverkabelung) verbindet den Gebäudeverteiler (GV) mit den Etagenverteilern (EV). Glasfaser oder Kupfer (Cat 7) – je nach Entfernung und Bandbreite."},
+{id:3,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Was ist die Tertiärverkabelung?",o:["Verkabelung zwischen Gebäuden","Etagenverkabelung vom Etagenverteiler zu den Anschlussdosen","Backbone-Verkabelung über Glasfaser","Verbindung zwischen Standortverteilern"],c:1,e:"Die Tertiärverkabelung (Horizontalverkabelung) führt vom Etagenverteiler (EV) zu den Anschlussdosen in den Räumen. Üblich: Kupferkabel Cat 6 oder Cat 7."},
+{id:4,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Wie lang darf der Permanent Link bei Kupferkabel maximal sein?",o:["100 Meter","90 Meter","50 Meter","120 Meter"],c:1,e:"Der Permanent Link (feste Strecke ohne Patchkabel) darf maximal 90 Meter lang sein. Die restlichen 10 Meter sind für Patchkabel reserviert (Channel Link = 100 m gesamt)."},
+{id:5,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Wie lang darf der Channel Link bei Kupferkabel maximal sein?",o:["90 Meter","100 Meter","150 Meter","50 Meter"],c:1,e:"Der Channel Link umfasst den gesamten Pfad: Patchkabel + Permanent Link + Patchkabel = max. 100 Meter. Die 10 m Differenz zum Permanent Link sind für die Patchkabel an beiden Enden."},
+{id:6,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Was sind passive Netzwerkkomponenten?",o:["Switches und Router","Kabel, Stecker, Anschlussdosen, Patchpanels ","Firewalls und Access Points","Server und Workstations"],c:1,e:"Passive Komponenten verarbeiten keine Signale aktiv. Dazu gehören: Kabel, Stecker, Anschlussdosen, Patchpanels, Verteiler und Kabelkanäle."},
+{id:7,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Welche Kabel werden bei der Primärverkabelung vorwiegend genutzt?",o:["Kupferkabel Cat 5","Glasfaserkabel","Koaxialkabel","Telefonkabel"],c:1,e:"Glasfaserkabel wegen großer Entfernungen und hoher Bandbreite. Die Primärverkabelung überbrückt oft mehrere hundert Meter zwischen Gebäuden."},
+{id:8,t:"Strukturierte Verkabelung",tc:"t-vk",q:"Welche Übertragungsgeschwindigkeit erreicht ein CAT5-Kabel?",o:["Bis zu 1 Gbit/s","Bis zu 100 Mbit/s","Bis zu 10 Gbit/s","Bis zu 10 Mbit/s"],c:1,e:"Cat5 erreicht bis zu 100 Mbit/s (Fast Ethernet). Erst Cat5e unterstützt 1 Gbit/s. Wichtig: In Prüfungen wird gezielt nach Cat5 (ohne 'e') gefragt!"},
+
+// ===== ETHERNET & ÜBERTRAGUNG =====
+{id:9,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was bedeutet Simplex-Übertragung?",o:["Abwechselnd in beide Richtungen","Datenübertragung nur in eine Richtung","Gleichzeitig in beide Richtungen","Übertragung über mehrere Kanäle"],c:1,e:"Simplex = nur eine Richtung. Beispiel: Fernsehsender, Radiosender. Der Empfänger kann nicht zurücksenden."},
+{id:10,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was bedeutet Halbduplex?",o:["Gleichzeitig in beide Richtungen","Nur in eine Richtung","Abwechselnd in beide Richtungen","Doppelte Geschwindigkeit in eine Richtung"],c:2,e:"Halbduplex = abwechselnd senden und empfangen, nie gleichzeitig. Beispiel: Funkgerät (Walkie-Talkie) – einer spricht, der andere hört zu."},
+{id:11,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was bedeutet Vollduplex?",o:["Abwechselnd in beide Richtungen","Nur in eine Richtung","Dreifache Bandbreite in eine Richtung","Gleichzeitig in beide Richtungen"],c:3,e:"Vollduplex = gleichzeitiges Senden und Empfangen. Beispiel: Telefongespräch. Moderne Switches arbeiten standardmäßig im Vollduplex-Modus."},
+{id:12,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist ein Unicast?",o:["Nachricht an alle Geräte im Netz","Kommunikation von einem Sender zu genau einem Empfänger","Nachricht an eine Gruppe","Nachricht an den nächstgelegenen Empfänger"],c:1,e:"Unicast = 1:1 Kommunikation. Ein Sender, ein Empfänger. Der Großteil des Netzwerkverkehrs ist Unicast (z. B. HTTP-Anfragen)."},
+{id:13,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist ein Broadcast?",o:["Nachricht an genau einen Empfänger","Nachricht an den nächstgelegenen Empfänger","Nachricht an eine definierte Gruppe","Nachricht an alle Geräte im gleichen Netzwerksegment"],c:3,e:"Broadcast = Nachricht an ALLE Geräte im Netzwerksegment. Broadcast-MAC: FF:FF:FF:FF:FF:FF. Beispiel: ARP-Request. Router leiten Broadcasts nicht weiter!"},
+{id:14,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist ein Multicast?",o:["Nachricht an alle Geräte","Kommunikation von einem Sender zu einer definierten Gruppe","Nachricht an genau einen Empfänger","Nachricht an den nächsten Router"],c:1,e:"Multicast = 1:Gruppe. Effizient für Streaming, da das Paket nur einmal gesendet und am Switch/Router vervielfältigt wird. IPv4: 224.0.0.0 – 239.255.255.255."},
+{id:15,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist ein Anycast?",o:["Nachricht an alle Geräte","Nachricht an genau einen Empfänger","Nachricht an den nächstgelegenen Empfänger einer Gruppe","Nachricht an eine definierte Gruppe"],c:2,e:"Anycast = das Paket geht an den topologisch nächsten Empfänger einer Gruppe mit gleicher Adresse. Wird bei DNS-Root-Servern und CDNs(Content Delivery Network) eingesetzt. Besonders wichtig bei IPv6."},
+{id:16,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wofür steht CSMA/CD?",o:["Central Switch Management Access with Collision Detection","Carrier Sense Multiple Access with Collision Detection","Carrier Sense Multiple Access with Collision Avoidance","Client Server Multiple Authentication with Collision Detection"],c:1,e:"CSMA/CD = Kollisionserkennung im kabelgebundenen Ethernet. Geräte hören das Medium ab, senden bei Stille, erkennen Kollisionen und senden nach zufälliger Wartezeit erneut."},
+{id:17,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wofür steht CSMA/CA?",o:["Carrier Sense Multiple Access with Collision Detection","Central System Management Architecture Collision Avoidence","Carrier Sense Multiple Access with Collision Avoidance","Client Server Media Access Care Aware"],c:2,e:"CSMA/CA = Kollisionsvermeidung in WLANs (802.11). Da Kollisionen im Funk schwer erkennbar sind, wird vorher geprüft und ggf. mit RTS/CTS der Kanal reserviert."},
+{id:18,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist das Hidden-Station-Problem?",o:["Ein Switch kann ein Gerät nicht finden","Zwei WLAN-Geräte sehen sich nicht, kommunizieren aber mit dem gleichen AP","Ein Router hat keine Default Route","Ein Server ist hinter einer Firewall versteckt"],c:1,e:"Hidden Station: Gerät A und C sehen sich nicht, senden aber beide an AP B → Kollision. Lösung: RTS/CTS-Verfahren (Request to Send / Clear to Send)."},
+
+// ===== ETHERNET FRAME =====
+{id:19,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wozu dient die Preamble im Ethernet Frame?",o:["Kennzeichnung des VLAN","Synchronisationsmuster (7 Byte) zur Takterkennung","Fehlererkennung mittels CRC","Angabe des nächsten Protokolls"],c:1,e:"Die Preamble (7 Byte: 10101010...) synchronisiert den Takt zwischen Sender und Empfänger. Zusammen mit dem SFD (1 Byte) = 8 Byte. Beide gehören nicht zum eigentlichen Frame."},
+{id:20,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was ist der SFD im Ethernet Frame?",o:["Source Frame Destination","Start Frame Delimiter ","Secure Frame Data","Switch Forward Decision"],c:1,e:"SFD = Start Frame Delimiter (1 Byte: 10101011). Das letzte Bit '1' unterscheidet ihn von der Preamble und markiert: 'Jetzt beginnt der Frame!'"},
+{id:21,t:"Ethernet & Übertragung",tc:"t-eth",q:"Was steht im Type-Feld des Ethernet Frames?",o:["Die Gesamtlänge des Frames","Das nächste Protokoll in der Payload","Die MAC-Adresse des Senders","Die VLAN-ID"],c:1,e:"Das Type-Feld (2 Byte) gibt an, welches Protokoll als nächstes folgt. Häufige Werte: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6."},
+{id:22,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wofür steht FCS im Ethernet Frame?",o:["Fast Connection Service","Frame Check Sequence","Frame Control System","Forward Check Standard"],c:1,e:"FCS = Frame Check Sequence (4 Byte). Nutzt CRC (Cyclic Redundancy Check) zur Fehlererkennung. Der Sender berechnet die Prüfsumme, der Empfänger vergleicht – stimmt sie nicht, wird der Frame verworfen."},
+{id:23,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wo wird der VLAN-TAG im Ethernet II Frame eingefügt?",o:["Vor der Preamble","Zwischen Quell-MAC-Adresse und Type-Feld","Nach der FCS","Zwischen Ziel-MAC und Quell-MAC"],c:1,e:"Der 4-Byte VLAN-Tag (802.1Q) wird zwischen Source-MAC und Type-Feld eingefügt. Dadurch wächst der maximale Frame von 1518 auf 1522 Byte."},
+{id:24,t:"Ethernet & Übertragung",tc:"t-eth",q:"Wie groß ist ein Ethernet II Frame (ohne VLAN-Tag)?",o:["Min. 32 Byte, max. 1024 Byte","Min. 64 Byte, max. 1518 Byte","Min. 128 Byte, max. 2048 Byte","Min. 46 Byte, max. 1500 Byte"],c:1,e:"Min. 64 Byte (Dest-MAC 6 + Src-MAC 6 + Type 2 + Payload min. 46 + FCS 4), max. 1518 Byte. Preamble und SFD zählen NICHT dazu! Mit VLAN-Tag: max. 1522 Byte."},
+
+// ===== IP & SUBNETTING =====
+{id:25,t:"IP & Subnetting",tc:"t-ip",q:"Wie ist eine IPv4-Adresse aufgebaut?",o:["128 Bits in 8 Blöcken","48 Bits in 6 Hexadezimalgruppen","32 Bits in 4 Oktetten","16 Bits in 2 Oktetten"],c:2,e:"IPv4 = 32 Bit, dargestellt als 4 Dezimalzahlen (Oktette) getrennt durch Punkte. Jedes Oktett = 8 Bit (0–255). Die Subnetzmaske in CIDR-Notation gibt die Netz-ID-Länge an."},
+{id:26,t:"IP & Subnetting",tc:"t-ip",q:"Worauf werden Hostbits zur Berechnung der Netz-ID gesetzt?",o:["Alle Hostbits auf 1","Alle Hostbits auf 0","Abwechselnd auf 0 und 1","Nur das erste Bit auf 0"],c:1,e:"Netz-ID: Alle Hostbits = 0. Beispiel: 192.168.1.130/24 → Netz-ID = 192.168.1.0 (letzte 8 Bit auf 0 gesetzt)."},
+{id:27,t:"IP & Subnetting",tc:"t-ip",q:"Worauf werden Hostbits zur Berechnung der Broadcastadresse gesetzt?",o:["Alle Hostbits auf 0","Nur das letzte Bit auf 1","Alle Hostbits auf 1","Abwechselnd auf 0 und 1"],c:2,e:"Broadcast-Adresse: Alle Hostbits = 1. Beispiel: 192.168.1.0/24 → Broadcast = 192.168.1.255 (letzte 8 Bit auf 1 gesetzt)."},
+{id:28,t:"IP & Subnetting",tc:"t-ip",q:"Was ist Subnetting?",o:["Zusammenfassung mehrerer Netze","Aufteilung eines Netzwerks in kleinere Subnetze","Verschlüsselung des Netzwerkverkehrs","Verteilung von IPs per DHCP"],c:1,e:"Subnetting teilt ein großes Netz in kleinere auf: weniger Broadcasts, bessere Verwaltung, höhere Sicherheit, effizientere IP-Nutzung."},
+{id:29,t:"IP & Subnetting",tc:"t-ip",q:"Was ist Supernetting?",o:["Aufteilung in Subnetze","Zusammenfassung mehrerer Netze zu einem größeren","Verschlüsselung von Routing-Infos","Priorisierung von Traffic"],c:1,e:"Supernetting (auch Routenaggregation) fasst mehrere kleine Netze zu einem großen zusammen. Reduziert Einträge in Routingtabellen. Beispiel: 4× /24-Netze → 1× /22-Netz."},
+{id:30,t:"IP & Subnetting",tc:"t-ip",q:"Wofür steht CIDR?",o:["Central Internet Domain Registry","Controlled Internal Data Routing","Classless Inter-Domain Routing","Common Interface for Data Recovery"],c:2,e:"CIDR = Classless Inter-Domain Routing. Ermöglicht flexible Subnetzmasken (z. B. /22, /27) statt fester Klassen (A, B, C). Standard seit 1993."},
+{id:31,t:"IP & Subnetting",tc:"t-ip",q:"Wofür steht VLSM?",o:["Virtual LAN Switching Method","Variable Length Subnet Mask","Very Large Scale Monitoring","VLAN Link State Management"],c:1,e:"VLSM = Variable Length Subnet Mask. Erlaubt unterschiedlich große Subnetze im selben Netz. So kann man z. B. ein /28 für 14 Hosts und ein /30 für eine Punkt-zu-Punkt-Verbindung verwenden."},
+{id:32,t:"IP & Subnetting",tc:"t-ip",q:"Wie viele Ports gibt es insgesamt?",o:["32.768","65.536","1.024","128.000"],c:1,e:"2^16 = 65.536 Ports. Well-known (0–1023): HTTP=80, HTTPS=443, SSH=22. Registered (1024–49151). Dynamic/Private (49152–65535): temporäre Client-Ports."},
+{id:33,t:"IP & Subnetting",tc:"t-ip",q:"Wie nennt sich die Kombination aus IP-Adresse und Port?",o:["Binding","Socket","Endpoint","Channel"],c:1,e:"Socket = IP-Adresse + Portnummer. Beispiel: 192.168.1.10:443. Ein Socket identifiziert eindeutig eine Kommunikationsverbindung zu einem Dienst."},
+{id:34,t:"IP & Subnetting",tc:"t-ip",q:"Wofür steht TCP?",o:["Transfer Communication Protocol","Total Control Process","Transmission Control Protocol","Transport Cache Protocol"],c:2,e:"TCP = zuverlässig, verbindungsorientiert. 3-Way-Handshake (SYN → SYN-ACK → ACK), Reihenfolgegarantie, Fehlerkorrektur. Für HTTP, SSH, E-Mail."},
+{id:35,t:"IP & Subnetting",tc:"t-ip",q:"Wofür steht UDP?",o:["Universal Data Protocol","User Datagram Protocol","Unified Distribution Process","User Direct Protocol"],c:1,e:"UDP = schnell, verbindungslos, 'Fire & Forget'. Kein Handshake, keine Bestätigung. Für DNS, VoIP, Streaming, Gaming – wo Geschwindigkeit wichtiger als Zuverlässigkeit ist."},
+
+// ===== OSI-MODELL =====
+{id:36,t:"OSI-Modell",tc:"t-osi",q:"Wie heißt Schicht 1 im OSI-Modell?",o:["Data Link Layer (Sicherungsschicht)","Physical Layer (Bitübertragungsschicht)","Network Layer (Vermittlungsschicht)","Transport Layer (Transportschicht)"],c:1,e:"Layer 1 = Physical Layer. Zuständig für Bits auf dem Medium: elektrische Signale (Kupfer), Lichtsignale (Glasfaser), Funkwellen (WLAN). Geräte: Hub, Repeater."},
+{id:37,t:"OSI-Modell",tc:"t-osi",q:"Wie heißt Schicht 2 im OSI-Modell?",o:["Physical Layer (Bitübertragungsschicht)","Network Layer (Vermittlungsschicht)","Data Link Layer (Sicherungsschicht)","Session Layer (Sitzungsschicht)"],c:2,e:"Layer 2 = Data Link Layer. Frames, MAC-Adressen, Fehlererkennung (CRC). Geräte: Switch, Bridge. Protokolle: Ethernet (802.3), WLAN (802.11), ARP."},
+{id:38,t:"OSI-Modell",tc:"t-osi",q:"Wie heißt Schicht 3 im OSI-Modell?",o:["Transport Layer (Transportschicht)","Data Link Layer (Sicherungsschicht)","Presentation Layer (Darstellungsschicht)","Network Layer (Vermittlungsschicht)"],c:3,e:"Layer 3 = Network Layer. IP-Pakete, logische Adressierung (IP), Routing. Geräte: Router, Layer-3-Switch. Protokolle: IP, ICMP, IPsec."},
+{id:39,t:"OSI-Modell",tc:"t-osi",q:"Wie heißt Schicht 4 im OSI-Modell?",o:["Network Layer (Vermittlungsschicht)","Transport Layer (Transportschicht)","Session Layer (Sitzungsschicht)","Application Layer (Anwendungsschicht)"],c:1,e:"Layer 4 = Transport Layer. Segmente (TCP) / Datagramme (UDP). Portnummern, Flusskontrolle, Fehlerkorrektur (TCP) oder 'Fire & Forget' (UDP)."},
+{id:40,t:"OSI-Modell",tc:"t-osi",q:"Mit welchen Adressen arbeiten wir auf OSI-Layer 2?",o:["IP-Adressen","Portnummern","MAC-Adressen ","Hostnamen"],c:2,e:"Layer 2 = MAC-Adressen (48 Bit, z. B. AA:BB:CC:DD:EE:FF). Die ersten 3 Byte = OUI (Hersteller), die letzten 3 Byte = Geräte-ID."},
+{id:41,t:"OSI-Modell",tc:"t-osi",q:"Mit welchen Adressen arbeiten wir auf OSI-Layer 3?",o:["MAC-Adressen","IP-Adressen","Portnummern","VLAN-IDs"],c:1,e:"Layer 3 = IP-Adressen. IPv4 (32 Bit) oder IPv6 (128 Bit). Logische Adressen, die unabhängig von der Hardware zugewiesen werden."},
+{id:42,t:"OSI-Modell",tc:"t-osi",q:"Wie heißen die Dateneinheiten auf OSI-Layer 2?",o:["Pakete","Frames","Segmente","Bits"],c:1,e:"Layer 2 = Frames. Layer 1 = Bits, Layer 3 = Pakete, Layer 4 = Segmente (TCP) / Datagramme (UDP), Layer 5–7 = Daten."},
+{id:43,t:"OSI-Modell",tc:"t-osi",q:"Wie heißen die Dateneinheiten auf OSI-Layer 4?",o:["Frames","Pakete","Segmente (TCP) oder Datagramme (UDP)","Bits"],c:2,e:"TCP = Segmente (verbindungsorientiert, nummeriert). UDP = Datagramme (verbindungslos). Die Portnummer im Header adressiert den Dienst."},
+
+// ===== SWITCH =====
+{id:44,t:"Switching",tc:"t-sw",q:"Auf welcher OSI-Schicht arbeitet ein normaler Switch?",o:["Schicht 1 - Bitübertragungsschicht (Physical Layer)","Schicht 3 - Vermittlungsschicht (Data Link Layer)","Schicht 2 – Sicherungsschicht (Data Link Layer)","Schicht 4 - Transportschicht (Transport Layer)"],c:2,e:"Ein Layer-2-Switch arbeitet auf der Sicherungsschicht und entscheidet anhand von MAC-Adressen, wohin ein Frame weitergeleitet wird."},
+{id:45,t:"Switching",tc:"t-sw",q:"Welche MAC-Adresse schreibt der Switch in die MAC-Tabelle?",o:["Die Destination-MAC","Die Source-MAC","Beide MAC-Adressen","Die Broadcast-Adresse"],c:1,e:"Der Switch lernt immer die Source-MAC. Kommt ein Frame an Port 3 mit Absender AA:BB:CC:DD:EE:FF → Eintrag: Port 3 = AA:BB:CC:DD:EE:FF. So weiß er, wo welches Gerät hängt."},
+{id:46,t:"Switching",tc:"t-sw",q:"Was ist Store-and-Forward Switching?",o:["Nur Ziel-MAC gelesen, sofort weiter","Gesamter Frame empfangen, FCS geprüft, dann weitergeleitet","Erste 64 Bytes geprüft","Frame ohne Prüfung verworfen"],c:1,e:"Store-and-Forward: Der Switch empfängt den kompletten Frame, prüft die CRC-Prüfsumme (FCS) und leitet erst dann weiter. Fehlerhafte Frames werden verworfen. Zuverlässig, aber höhere Latenz."},
+{id:47,t:"Switching",tc:"t-sw",q:"Was ist Cut-Through Switching?",o:["Gesamter Frame geprüft vor Weiterleitung","Nur Ziel-MAC (6 Bytes) gelesen, sofort weiter – keine Fehlerprüfung","Erste 64 Bytes geprüft","Frame wird fragmentiert"],c:1,e:"Cut-Through: Der Switch liest nur die Destination-MAC (erste 6 Bytes nach Preamble) und leitet sofort weiter. Minimale Latenz, aber auch defekte Frames werden durchgelassen."},
+{id:48,t:"Switching",tc:"t-sw",q:"Was ist Fragment-Free Switching?",o:["Gesamter Frame wird geprüft","Nur die Ziel-MAC wird gelesen","Erste 64 Bytes geprüft – filtert Kollisionsfragmente (Runts)","Frame wird zerlegt"],c:2,e:"Fragment-Free (Modified Cut-Through): Prüft die ersten 64 Bytes. Warum 64? Ethernet-Kollisionen treten innerhalb der ersten 64 Bytes auf. Frames <64 Bytes (Runts) werden erkannt und verworfen. Kompromiss aus Geschwindigkeit und Sicherheit."},
+{id:49,t:"Switching",tc:"t-sw",q:"Was ist eine Kollisionsdomäne?",o:["Bereich in dem Broadcasts alle erreichen","Bereich in dem Geräte ein Medium teilen und Kollisionen auftreten können","Ein VLAN","Ein verschlüsseltes Segment"],c:1,e:"Kollisionsdomäne = geteiltes Medium, Kollisionsgefahr. Hub: alle Ports = eine Kollisionsdomäne. Switch: jeder Port = eigene Kollisionsdomäne. Deshalb sind Switches besser als Hubs."},
+{id:50,t:"Switching",tc:"t-sw",q:"Was ist eine Broadcastdomäne?",o:["Bereich in dem Kollisionen auftreten","Bereich in dem ein Broadcast alle Geräte erreicht","Ein einzelner Port","Ein verschlüsselter Tunnel"],c:1,e:"Broadcastdomäne = alle Geräte die einen Broadcast empfangen. Ein Switch trennt sie NICHT (leitet Broadcasts an alle Ports). Erst ein Router oder VLAN trennt Broadcastdomänen."},
+{id:51,t:"Switching",tc:"t-sw",q:"Welches Gerät trennt Kollisionsdomänen?",o:["Ein Hub","Ein Switch","Ein Repeater","Ein Patchpanel"],c:1,e:"Switch = trennt Kollisionsdomänen (jeder Port eigene). Hub = trennt NICHT. Router = trennt beides. Merke: Hub nix, Switch halb, Router alles."},
+{id:52,t:"Switching",tc:"t-sw",q:"Welches Gerät trennt Broadcastdomänen?",o:["Ein Switch","Ein Router oder VLAN","Ein Hub","Ein Patchpanel"],c:1,e:"Router und VLANs trennen Broadcastdomänen. Ein Switch leitet Broadcasts an alle Ports weiter und trennt sie daher NICHT."},
+{id:53,t:"Switching",tc:"t-sw",q:"Was sind Runts?",o:["Frames größer als 1518 Bytes","Frames kleiner als 64 Bytes","Frames ohne MAC-Adresse","Verschlüsselte Frames"],c:1,e:"Runts = Frames <64 Bytes. Entstehen meist durch Kollisionen (Frame wird nicht vollständig gesendet). Fragment-Free Switching filtert genau diese heraus."},
+{id:54,t:"Switching",tc:"t-sw",q:"Was sind Giants?",o:["Frames kleiner als 64 Bytes","Frames größer als 1518 Bytes (bzw. 1522 mit VLAN-Tag)","Frames ohne Prüfsumme","Broadcast-Frames"],c:1,e:"Giants = Frames >1518 Bytes (>1522 mit VLAN). Ursachen: fehlerhafte NIC, falsche MTU-Konfiguration (z. B. Jumbo Frames auf einer Seite aktiviert, auf der anderen nicht)."},
+{id:55,t:"Switching",tc:"t-sw",q:"Was bedeuten CRC-Fehler im Switch-Log?",o:["Switch hat zu wenig Speicher","Die Prüfsumme stimmt nicht","VLAN falsch konfiguriert","IP-Adresse doppelt vergeben"],c:1,e:"CRC-Fehler = Daten auf dem Kabel beschädigt. Häufigste Ursachen: defektes/geknicktes Kabel, lose Stecker, EMI-Störungen, Duplex-Mismatch. Tipp: Kabel tauschen und Duplex-Einstellungen prüfen."},
+{id:56,t:"Switching",tc:"t-sw",q:"Was ist ein Layer-3-Switch?",o:["Switch mit 3 Ports","Switch der nur Layer 2 beherrscht","Switch der zusätzlich hardwarebasiert auf Layer 3 routen kann","Switch mit eingebauter Firewall"],c:2,e:"Layer-3-Switch = Switch + Router in einem. Routet zwischen VLANs hardwarebasiert (schneller als ein Router). Hat aber weniger WAN-/Firewall-Funktionen als ein dedizierter Router."},
+
+// ===== ARP =====
+{id:57,t:"ARP",tc:"t-arp",q:"Wofür steht ARP?",o:["Automatic Routing Protocol","Address Resolution Protocol","Advanced Request Process","Application Resource Protocol"],c:1,e:"ARP = Address Resolution Protocol. Löst eine bekannte IP-Adresse in die zugehörige MAC-Adresse auf. Notwendig, weil Ethernet MAC-Adressen für die Frame-Zustellung braucht."},
+{id:58,t:"ARP",tc:"t-arp",q:"Was ist ein ARP-Request?",o:["Unicast-Antwort mit der MAC-Adresse","Broadcast: 'Wer hat IP x.x.x.x? Bitte MAC senden!'","Löschen eines Cache-Eintrags","Verschlüsselte ARP-Nachricht"],c:1,e:"ARP-Request = Broadcast (FF:FF:FF:FF:FF:FF) an alle Geräte im Segment. Nur das Gerät mit der gesuchten IP antwortet mit einem ARP-Reply (Unicast)."},
+{id:59,t:"ARP",tc:"t-arp",q:"Was ist ein ARP-Reply?",o:["Broadcast an alle Geräte","Unicast-Antwort: 'Meine MAC ist XX:XX:XX:XX:XX:XX'","Anfrage nach einer MAC-Adresse","Löschung der ARP-Tabelle"],c:1,e:"ARP-Reply = Unicast direkt zurück an den Anfragenden. Enthält die gesuchte MAC-Adresse. Der Sender speichert die Zuordnung dann im ARP-Cache."},
+{id:60,t:"ARP",tc:"t-arp",q:"Was ist Gratuitous ARP?",o:["Verschlüsselter ARP-Request","Unaufgeforderter ARP zur Erkennung von IP-Konflikten ","ARP-Anfrage an DNS-Server","ARP-Paket zur Bandbreitenmessung"],c:1,e:"Gratuitous ARP = unaufgefordert gesendet. Das Gerät fragt nach seiner eigenen IP. Zweck: IP-Konflikte erkennen, ARP-Caches aktualisieren (z. B. nach Failover), Präsenz ankündigen."},
+{id:61,t:"ARP",tc:"t-arp",q:"Was ist ARP-Spoofing?",o:["Automatische ARP-Aktualisierung","Verschlüsselung von ARP-Paketen","Angriff mit gefälschten ARP-Nachrichten für Man-in-the-Middle","Backup für ARP-Tabellen"],c:2,e:"ARP-Spoofing: Angreifer sendet gefälschte ARP-Replies, um sich als Gateway auszugeben. Opfer sendet Traffic an den Angreifer statt ans Gateway. Schutz: DAI, Port Security."},
+{id:62,t:"ARP",tc:"t-arp",q:"Was ist Dynamic ARP Inspection (DAI)?",o:["Ein Routing-Protokoll","Layer-2-Mechanismus der ARP-Pakete gegen die DHCP-Snooping-DB prüft","Eine VLAN-Konfiguration","Ein Verschlüsselungsverfahren"],c:1,e:"DAI = Sicherheitsfunktion auf Managed Switches. Prüft eingehende ARP-Pakete gegen die DHCP-Snooping-Datenbank. Gefälschte ARP-Pakete werden verworfen. Wichtigster Schutz gegen ARP-Spoofing."},
+{id:63,t:"ARP",tc:"t-arp",q:"Wofür steht MTU?",o:["Multi Transfer Unit","Maximum Throughput Usage","Maximum Transmission Unit","Media Type Upgrade"],c:2,e:"MTU = Maximum Transmission Unit. Standard bei Ethernet: 1500 Bytes (Payload). Ist ein Paket größer, wird es fragmentiert (aufgeteilt) oder verworfen (bei gesetztem DF-Flag)."},
+
+// ===== STP =====
+{id:64,t:"Spanning Tree",tc:"t-stp",q:"Wofür steht STP?",o:["Secure Transfer Protocol","Switch Trunk Protocol","Spanning Tree Protocol ","Standard Topology Process"],c:2,e:"STP (IEEE 802.1D) verhindert Schleifen in redundanten Netzwerken. Es blockiert bestimmte Ports, sodass nur ein logischer Pfad aktiv bleibt. Fällt dieser aus, wird ein blockierter Port aktiviert."},
+{id:65,t:"Spanning Tree",tc:"t-stp",q:"Was ist die Root Bridge bei STP?",o:["Switch mit den meisten Ports","Switch mit der niedrigsten Bridge ID ","Ältester Switch im Netz","Switch mit höchster Bandbreite"],c:1,e:"Root Bridge = zentrale Referenz im STP. Hat die niedrigste Bridge ID (Priorität + MAC). Alle anderen Switches berechnen den kostengünstigsten Pfad dorthin. Alle Ports der Root Bridge sind Designated Ports."},
+{id:66,t:"Spanning Tree",tc:"t-stp",q:"Woraus besteht die Bridge ID?",o:["Nur MAC-Adresse","Priorität + MAC-Adresse","IP-Adresse + Portnummer","Hostname + VLAN-ID"],c:1,e:"Bridge ID = Priorität (default 32768) + MAC. Niedrigste Priorität gewinnt. Bei gleicher Priorität entscheidet die niedrigste MAC-Adresse. Tipp: Priorität manuell setzen, um Root Bridge zu bestimmen."},
+{id:67,t:"Spanning Tree",tc:"t-stp",q:"Was ist ein Root Port?",o:["Alle Ports der Root Bridge","Port mit dem kostengünstigsten Weg zur Root Bridge","Port mit höchster Bandbreite","Erster Port am Switch"],c:1,e:"Root Port = bester Weg zur Root Bridge (niedrigste kumulative Pfadkosten). Genau einer pro Switch (außer Root Bridge selbst). Ist im Forwarding-Zustand."},
+{id:68,t:"Spanning Tree",tc:"t-stp",q:"Was ist ein Designated Port?",o:["Blockierter Port","Port der nur BPDUs empfängt","Port der für die Weiterleitung auf einem Segment zuständig ist","Management-Port des Switches"],c:2,e:"Designated Port = zuständig für Weiterleitung auf einem Netzwerksegment. Alle Ports der Root Bridge sind Designated Ports. Auf der Gegenseite eines Root Ports befindet sich immer ein Designated Port."},
+{id:69,t:"Spanning Tree",tc:"t-stp",q:"Was sind Blocked Ports bei STP?",o:["Defekte Ports","Ports ohne Geräte","Ports die keine Nutzdaten weiterleiten, aber BPDUs empfangen","Komplett deaktivierte Ports"],c:2,e:"Blocked Ports leiten keine Nutzdaten weiter, empfangen aber weiterhin BPDUs. Sie dienen als Backup: Fällt ein aktiver Pfad aus, kann ein Blocked Port in den Forwarding-Zustand wechseln."},
+
+// ===== VLAN =====
+{id:72,t:"VLAN",tc:"t-vlan",q:"Wofür steht VLAN?",o:["Very Large Area Network","Virtual Link Access Node","Virtual Local Area Network","VLAN Local Authentication Network"],c:2,e:"VLAN = logisches Netzwerk innerhalb eines physischen Netzes. Ermöglicht Netztrennung ohne zusätzliche Hardware. Jedes VLAN = eigene Broadcastdomäne."},
+{id:73,t:"VLAN",tc:"t-vlan",q:"Wie groß ist ein VLAN-Tag?",o:["2 Byte","4 Byte ","6 Byte","8 Byte"],c:1,e:"VLAN-Tag (802.1Q) = 4 Byte: TPID (2 Byte: 0x8100) + TCI (2 Byte: 3 Bit Priority + 1 Bit DEI + 12 Bit VLAN-ID)."},
+{id:74,t:"VLAN",tc:"t-vlan",q:"Wie viele VLANs sind nutzbar?",o:["4096","4094","1024","65536"],c:1,e:"12 Bit VLAN-ID = 2^12 = 4096 theoretisch. VLAN 0 (Priority-Tag) und VLAN 4095 (reserviert) sind nicht nutzbar → 4094 nutzbare VLANs."},
+{id:75,t:"VLAN",tc:"t-vlan",q:"Welches IEEE-Protokoll definiert VLANs?",o:["IEEE 802.3","IEEE 802.1Q","IEEE 802.11","IEEE 802.1D"],c:1,e:"802.1Q = VLAN-Tagging. 802.3 = Ethernet. 802.11 = WLAN. 802.1D = Spanning Tree Protocol. Die IEEE-Nummern werden gern in Prüfungen abgefragt!"},
+{id:76,t:"VLAN",tc:"t-vlan",q:"Was ist ein Trunk?",o:["Einzelne VLAN-Verbindung ohne Tags","Verbindung über die mehrere VLANs mit VLAN-Tags übertragen werden","Backup-Kabel","Verschlüsselte VPN-Verbindung"],c:1,e:"Trunk = Verbindung die mehrere VLANs transportiert (Frames mit 802.1Q-Tag). Typisch: Switch↔Switch, Switch↔Router. Gegenteil: Access Port (ein VLAN, ohne Tag)."},
+{id:77,t:"VLAN",tc:"t-vlan",q:"Was ist ein Access Port?",o:["Port für mehrere VLANs","Switch-Port für ein einzelnes VLAN","Management-Port","Port nur für Router"],c:1,e:"Access Port = einem VLAN zugewiesen, Frames ohne Tag. Endgeräte (PC, Drucker) hängen an Access Ports. Der Switch fügt beim Empfang intern das VLAN zu und entfernt es beim Senden."},
+{id:78,t:"VLAN",tc:"t-vlan",q:"Was ist das Native VLAN?",o:["VLAN mit höchster Priorität","VLAN auf einem Trunk dessen Frames ungetaggt übertragen werden","Verschlüsseltes VLAN","Management-VLAN des Routers"],c:1,e:"Native VLAN = ungetaggt auf dem Trunk (Standard: VLAN 1). Sicherheitsrisiko: VLAN-Hopping via Double Tagging nutzt das Native VLAN aus. Empfehlung: auf ein unbenutztes VLAN ändern!"},
+{id:79,t:"VLAN",tc:"t-vlan",q:"Wie können verschiedene VLANs miteinander kommunizieren?",o:["Über einen Hub","Über Inter-VLAN-Routing","Durch Ändern der MAC","Automatisch über den Switch"],c:1,e:"VLANs trennen Broadcastdomänen → kein direkter Verkehr möglich. Inter-VLAN-Routing nötig: Router-on-a-Stick (1 Interface, je 1 Subinterface pro VLAN) oder Layer-3-Switch (schneller, hardwarebasiert)."},
+{id:80,t:"VLAN",tc:"t-vlan",q:"Was ist ein VLAN-Hopping-Angriff?",o:["Angreifer ändert VLAN-ID am Switch","Angreifer erlangt durch Double Tagging Zugriff auf ein fremdes VLAN","Angreifer löscht alle VLANs","Angreifer klont die Root Bridge"],c:1,e:"VLAN Hopping via Double Tagging: Frame mit 2 VLAN-Tags. Switch 1 entfernt äußeren Tag (Native VLAN), Switch 2 liest inneren Tag → Frame landet im Ziel-VLAN. Schutz: Native VLAN ändern, Trunks explizit konfigurieren."},
+
+// ===== QOS =====
+{id:81,t:"QoS & Traffic",tc:"t-qos",q:"Wofür steht QoS?",o:["Query of Service","Quality of Service","Queue of Signals","Quick Operating System"],c:1,e:"QoS = Verfahren zur Priorisierung. Zeitkritischer Verkehr (VoIP, Video) wird bevorzugt, weniger wichtiger (Downloads, Backup) bei Engpässen zurückgestellt."},
+{id:82,t:"QoS & Traffic",tc:"t-qos",q:"Was ist Traffic Shaping?",o:["Überschüssige Pakete sofort verwerfen","Alle Pakete gleich behandeln","Pakete klassifizieren, in Warteschlangen puffern und priorisiert weiterleiten","Pakete verschlüsseln"],c:2,e:"Traffic Shaping: Pakete werden klassifiziert → in Warteschlangen (Queues) einsortiert → Scheduler leitet sie priorisiert weiter. Überschüssige Pakete werden verzögert, nicht verworfen. Glättet den Datenfluss."},
+{id:83,t:"QoS & Traffic",tc:"t-qos",q:"Was ist Traffic Policing?",o:["Pakete in Warteschlangen verzögern","Überschüssige Pakete sofort verwerfen – kein Puffern","Alle Pakete priorisieren","Pakete duplizieren"],c:1,e:"Traffic Policing: Harte Grenze. Überschüssige Pakete werden sofort verworfen (Drop). Kein Puffern, keine Verzögerung. Härter als Shaping, aber ohne zusätzliche Latenz."},
+{id:84,t:"QoS & Traffic",tc:"t-qos",q:"Was ist DiffServ?",o:["VLAN-Protokoll","Routing-Algorithmus","QoS über das ToS-Feld im IPv4-Header","Verschlüsselungsstandard"],c:2,e:"DiffServ (Differentiated Services): QoS-Bits werden im ToS-Feld (Type of Service) des IPv4-Headers gesetzt. Bei IPv6: Traffic-Class-Feld. Router/Firewalls klassifizieren den Verkehr und setzen die Bits – nicht die Applikation."},
+{id:85,t:"QoS & Traffic",tc:"t-qos",q:"Wofür ist die Priority im VLAN-Tag?",o:["Switch-Identifikation","QoS – 3 Bit groß","Verschlüsselungsgrad","Paketgröße"],c:1,e:"3 Bit Priority (PCP = Priority Code Point) im VLAN-Tag. 8 Stufen (0–7). Niedrige Zahl = hohe Priorität. Damit können Switches auf Layer 2 bereits priorisieren, ohne ins IP-Paket zu schauen."},
+
+// ===== ROUTING =====
+{id:86,t:"Routing",tc:"t-rt",q:"Was ist statisches Routing?",o:["Automatische Routenberechnung","Manuelle Eintragung von Routen ","Routing nur über WLAN","Routing nur in VLANs"],c:1,e:"Statisch = manuell konfiguriert, fest – ändern sich nicht automatisch. Vorteile: einfach, sicher, ressourcenschonend. Nachteile: kein Auto-Failover, hoher Aufwand in großen Netzen, keine Lastverteilung."},
+{id:87,t:"Routing",tc:"t-rt",q:"Was ist dynamisches Routing?",o:["Manuell konfigurierte feste Routen","Automatische Routenermittlung durch Protokolle und Algorithmen","Routing nur für IPv6","Routing ohne Routingtabelle"],c:1,e:"Dynamisch = Router lernen Routen automatisch über Protokolle (OSPF, RIP, BGP). Passen sich bei Ausfällen an, ermöglichen Load Balancing. Aber: höherer Ressourcenverbrauch, komplexer."},
+{id:88,t:"Routing",tc:"t-rt",q:"Was ist die Default Route (IPv4)?",o:["255.255.255.255/32","0.0.0.0/0 ","127.0.0.1/8","192.168.0.0/16"],c:1,e:"Default Route = 0.0.0.0/0 (IPv4) bzw. ::/0 (IPv6). Der 'Catch-All'-Eintrag in der Routingtabelle. Alles was nicht spezifischer matcht, geht über diese Route (meist zum Internet-Gateway)."},
+{id:89,t:"Routing",tc:"t-rt",q:"Was ist ein Autonomes System (AS)?",o:["Einzelner Router mit mehreren Interfaces","Sammlung von Routern unter gemeinsamer Verwaltung","VLAN mit eigenem Switch","Subnetz ohne Gateway"],c:1,e:"AS = Netzwerk unter einheitlicher Verwaltung (z. B. ein ISP oder großes Unternehmen). Jedes AS hat eine eindeutige AS-Nummer (ASN), vergeben von IANA/RIR."},
+{id:90,t:"Routing",tc:"t-rt",q:"Wofür steht OSPF?",o:["Open System Protocol Framework","Optimal Switching Path Finder","Open Shortest Path First","Operating System Packet Filter"],c:2,e:"OSPF = Link-State-Protokoll (IGP). Jeder Router kennt die komplette Topologie und berechnet den kürzesten Pfad mit Dijkstra. Schnelle Konvergenz, skalierbar, Metrik basiert auf Bandbreite."},
+{id:91,t:"Routing",tc:"t-rt",q:"Wofür steht RIP?",o:["Remote Internet Protocol","Routing Information Protocol","Router Interface Process","Rapid Integration Protocol"],c:1,e:"RIP = Distanzvektor, Metrik = Hop Count (max. 15, 16 = unreachable). Einfach aber langsam konvergierend. RIPv1 = classful, RIPv2 = classless mit VLSM. Gilt als veraltet."},
+{id:92,t:"Routing",tc:"t-rt",q:"Wofür steht BGP?",o:["Basic Gateway Process","Bandwidth Group Protocol","Border Gateway Protocol","Bridge Gateway Protocol"],c:2,e:"BGP = das Routing-Protokoll des Internets (EGP). Verbindet autonome Systeme miteinander. Path-Vector-Protokoll – tauscht komplette AS-Pfade aus, nicht nur Hop Counts."},
+{id:93,t:"Routing",tc:"t-rt",q:"Was ist Distanzvektor-Routing?",o:["Jeder Router kennt die vollständige Topologie","Router tauschen Infos über Entfernung und Richtung zu Zielen aus","Routing nur über statische Einträge","Routing basierend auf MAC-Adressen"],c:1,e:"Distanzvektor: Router kennen nur ihre Nachbarn und deren Kosten. Sie tauschen periodisch ihre Routingtabellen aus. Beispiel: RIP. Nachteil: langsame Konvergenz, anfällig für Routing-Schleifen."},
+{id:94,t:"Routing",tc:"t-rt",q:"Was ist Link-State-Routing?",o:["Router kennen nur direkte Nachbarn","Router kennen die vollständige Topologie","Routing nur über Hop Count","Routing ohne Routingtabelle"],c:1,e:"Link-State: Jeder Router hat die komplette Netzwerkkarte (Link-State-Database) und berechnet selbst den besten Pfad (Dijkstra). Schnellere Konvergenz als Distanzvektor. Beispiel: OSPF."},
+{id:95,t:"Routing",tc:"t-rt",q:"Was ist der Unterschied zwischen TTL und Hop Count?",o:["Beides ist dasselbe","TTL zählt runter, Hop Count zählt Router","TTL zählt hoch, Hop Count runter","TTL nur IPv6, Hop Count nur IPv4"],c:1,e:"TTL (Time to Live): Schutzmechanismus im IP-Header, wird bei jedem Router um 1 reduziert. Bei 0 → Paket verworfen (verhindert endlose Schleifen). Hop Count: Metrik bei RIP, zählt Router bis zum Ziel. Nicht verwechseln!"},{id:97,t:"Routing",tc:"t-rt",q:"Was ist Split Horizon?",o:["Netzwerk in zwei Hälften teilen","Route nicht über das Interface bewerben von dem sie gelernt wurde","Trennung IPv4/IPv6","Doppelte Routenwerbung"],c:1,e:"Split Horizon: Wenn Router A die Route zum Netz X von Router B gelernt hat, bewirbt er sie NICHT zurück an B. Verhindert Routing-Schleifen bei Distanzvektor-Protokollen (RIP)."},
+
+// ===== SICHERHEIT =====
+{id:100,t:"Sicherheit",tc:"t-sec",q:"Was ist IP-Fragmentierung?",o:["Zusammenfassung kleiner Pakete","Aufteilung großer IP-Pakete für Netze mit kleinerer MTU","Verschlüsselung von IP-Paketen","Komprimierung von Headern"],c:1,e:"Ist ein Paket größer als die MTU (z.B. 1500 Byte bei Ethernet), wird es in kleinere Fragmente aufgeteilt. Das Don't-Fragment-Flag (DF) im IP-Header kann dies verhindern – dann wird das Paket verworfen."},
+{id:101,t:"Sicherheit",tc:"t-sec",q:"Was ist Router-on-a-Stick?",o:["Router mit einem Kabel","Inter-VLAN-Routing","Redundantes Router-Setup","Router als DHCP-Server"],c:1,e:"Router-on-a-Stick: Ein Router, ein physisches Interface, mehrere logische Subinterfaces (je eins pro VLAN). Verbunden über einen Trunk-Port am Switch. Nachteil: Bandbreiten-Engpass am einen Interface."},
+{id:102,t:"Switching",tc:"t-sw",q:"Was ist die Hauptaufgabe eines Switches?",o:["Routing zwischen Netzwerken","Datenverkehr auf Layer 2 weiterleiten","IP-Adressen per DHCP vergeben","Firewall-Funktionen"],c:1,e:"Switch = Layer 2, MAC-basiert. Lernt Source-MACs, leitet Frames gezielt an den richtigen Port weiter (statt an alle wie ein Hub). Trennt Kollisionsdomänen, aber NICHT Broadcastdomänen."},
+{id:103,t:"Routing",tc:"t-rt",q:"Was ist die Hauptaufgabe eines Routers?",o:["MAC-Adressen lernen","Pakete zwischen Netzwerken weiterleiten","VLAN-Tags hinzufügen","Netzwerkkabel verbinden"],c:1,e:"Router = Layer 3, IP-basiert. Verbindet verschiedene Netzwerke, trifft Routing-Entscheidungen anhand der Routingtabelle. Trennt sowohl Kollisions- als auch Broadcastdomänen."},
+];
+
+// ===== QUIZ ENGINE =====
+let mode="menu",pool=[],cur=0,sel={},sub={},sc=0,totalQ=0,shuffled={};
+
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+function shuffleOptions(q){
+  const correct=q.o[q.c];
+  const indices=shuffle([0,1,2,3]);
+  const newO=indices.map(i=>q.o[i]);
+  const newC=newO.indexOf(correct);
+  return{...q,o:newO,c:newC};
+}
+
+function startQuiz(count){
+  pool=shuffle(ALL_Q).slice(0,count).map(q=>shuffleOptions(q));
+  totalQ=pool.length;cur=0;sel={};sub={};sc=0;shuffled={};mode="quiz";render();
+}
+
+function startAll(){
+  pool=shuffle(ALL_Q).map(q=>shuffleOptions(q));
+  totalQ=pool.length;cur=0;sel={};sub={};sc=0;shuffled={};mode="quiz";render();
+}
+
+function pick(qid,idx){if(sub[qid]!==undefined)return;sel[qid]=idx;render();}
+function submit(){const q=pool[cur];if(sel[q.id]===undefined)return;sub[q.id]=true;if(sel[q.id]===q.c)sc++;render();}
+function goTo(i){cur=i;render();}
+function goNext(){if(cur<pool.length-1){cur++;render();}}
+function goPrev(){if(cur>0){cur--;render();}}
+function showResults(){mode="result";renderResults();}
+function goMenu(){mode="menu";renderMenu();}
+function resetQuiz(){startQuiz(totalQ);}
+function toggleTheme(){document.body.classList.toggle('dark');const d=document.body.classList.contains('dark');const b=document.getElementById('thBtn');if(b)b.textContent=d?'☀️':'🌙';try{localStorage.setItem('nw-quiz-theme',d?'dark':'light');}catch(e){}}
+
+function renderMenu(){
+  let h='<div class="hdr"><div><h1>⚡ LF09 Netzwerk Quiz</h1><div class="sub">Woche 1 · '+ALL_Q.length+' Fragen</div></div><div class="hdr-r"><button class="tbtn" id="thBtn" onclick="toggleTheme()">🌙</button></div></div>';
+  h+='<div class="menu-card"><h1>Wie viele Fragen?</h1><p class="menu-sub">Fragen werden zufällig aus dem Pool ausgewählt und die Antworten gemischt.</p>';
+  h+='<div class="menu-grid">';
+  [10,20,30,40].forEach(n=>{
+    h+='<button class="menu-btn" onclick="startQuiz('+Math.min(n,ALL_Q.length)+')">'+n+' Fragen</button>';
+  });
+  h+='<button class="menu-btn all" onclick="startAll()">📋 Alle '+ALL_Q.length+' Fragen<span>Kompletter Fragenkatalog</span></button>';
+  h+='</div>';
+  h+='<div class="menu-topics"><p>📚 Themen: Strukturierte Verkabelung · Ethernet & Übertragung · OSI-Modell · Switching · Spanning Tree · VLAN · Routing · ARP · QoS & Traffic · IP & Subnetting · Sicherheit</p></div>';
+  h+='</div>';
+  document.getElementById('app').innerHTML=h;
+  fixThemeBtn();
+}
+
+function render(){
+  if(mode==="menu"){renderMenu();return;}
+  if(mode==="result"){renderResults();return;}
+  const q=pool[cur],s=sel[q.id],isSub=sub[q.id]||false,isRight=isSub&&s===q.c;
+  const _tc=Object.keys(sub).filter(id=>pool.find(p=>p.id==id&&sel[id]===p.c)).length;
+  const _ta=Object.keys(sub).length;
+  
+  let h='<div class="hdr"><div><h1>⚡ Netzwerk Quiz</h1><div class="sub">'+totalQ+' Fragen · Runde läuft</div></div><div class="hdr-r"><div class="pill">Score: <b>'+_tc+'</b> / '+_ta+'</div><button class="tbtn" id="thBtn" onclick="toggleTheme()">🌙</button></div></div>';
+  h+='<div class="progress"><div class="p-info"><span>Frage '+(cur+1)+' / '+totalQ+'</span><span>'+_ta+' beantwortet · '+_tc+' richtig</span></div><div class="p-bar"><div class="p-fill" style="width:'+((cur+1)/totalQ*100)+'%"></div></div><div class="dots">';
+  pool.forEach((qu,i)=>{let c='dot';if(i===cur)c+=' a';if(sub[qu.id]){c+=sel[qu.id]===qu.c?' c':' w';}h+='<div class="'+c+'" onclick="goTo('+i+')">'+(i+1)+'</div>';});
+  h+='</div></div>';
+  
+  h+='<div class="card"><div class="c-hdr"><div class="badge '+q.tc+'">'+q.t+'</div><h2>'+q.q+'</h2></div><div class="c-body">';
+  q.o.forEach((opt,idx)=>{
+    const selected=s===idx,correct=idx===q.c;
+    let oc='opt',ic='ind',tag='';
+    if(isSub){oc+=' d';if(correct&&selected){oc+=' cs';ic+=' c';tag='<span class="ot r">✓ Richtig</span>';}else if(correct&&!selected){oc+=' cm';ic+=' m';tag='<span class="ot mi">← Richtig</span>';}else if(!correct&&selected){oc+=' ws';ic+=' w';tag='<span class="ot wr">✗ Falsch</span>';}else{oc+=' dm';}}
+    else{if(selected){oc+=' s';ic+=' s';}}
+    let inner='';
+    if(selected&&!isSub)inner='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if(isSub&&correct&&selected)inner='<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6L5 9L10 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if(isSub&&!correct&&selected)inner='<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2L8 8M8 2L2 8" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>';
+    if(isSub&&correct&&!selected)inner='<div style="width:8px;height:8px;border-radius:50%;background:var(--orange)"></div>';
+    h+='<button class="'+oc+'" onclick="pick('+q.id+','+idx+')"><div class="'+ic+'">'+inner+'</div><span class="ol">'+opt+'</span>'+tag+'</button>';
+  });
+  h+='</div>';
+  if(isSub){const ec=isRight?'ri':'pa';h+='<div class="exp '+ec+'"><b>'+(isRight?'✓ Richtig!':'✗ Leider falsch')+'</b><div class="et">'+q.e+'</div></div>';}
+  h+='</div><div class="actions">';
+  h+='<button class="btn b3" onclick="goPrev()"'+(cur===0?' disabled':'')+'>← Zurück</button>';
+  if(!isSub){h+=s===undefined?'<button class="btn bd" disabled>Antwort prüfen</button>':'<button class="btn b1" onclick="submit()">Antwort prüfen</button>';}
+  else if(cur<pool.length-1){h+='<button class="btn b1" onclick="goNext()">Nächste Frage →</button>';}
+  else{h+='<button class="btn b1" style="background:linear-gradient(135deg,var(--green),#2ecc71)" onclick="showResults()">Ergebnis 🏆</button>';}
+  h+='</div>';
+  h+='<div style="text-align:center;margin-top:8px"><button class="btn b4" style="width:auto;padding:8px 20px;font-size:11px" onclick="goMenu()">↩ Zurück zum Hauptmenü</button></div>';
+  document.getElementById('app').innerHTML=h;
+  fixThemeBtn();
+}
+
+function renderResults(){
+  const _tc=Object.keys(sub).filter(id=>pool.find(p=>p.id==id&&sel[id]===p.c)).length;
+  const pct=Math.round(_tc/totalQ*100);
+  let grade,emoji;
+  if(pct>=92){grade='Ausgezeichnet!';emoji='🏆';}else if(pct>=81){grade='Sehr gut!';emoji='🎯';}
+  else if(pct>=67){grade='Gut!';emoji='💪';}else if(pct>=50){grade='Ausreichend';emoji='📝';}
+  else{grade='Noch üben!';emoji='🔁';}
+  
+  let h='<div class="hdr"><div><h1>⚡ Netzwerk Quiz</h1></div><div class="hdr-r"><button class="tbtn" id="thBtn" onclick="toggleTheme()">🌙</button></div></div>';
+  h+='<div class="rh"><div class="em">'+emoji+'</div><div class="gr">'+grade+'</div><div class="sc">'+_tc+' / '+totalQ+'</div><div class="pc">'+pct+'% richtig</div><div class="rb"><div style="width:'+pct+'%"></div></div></div>';
+  
+  h+='<h2 style="font-size:16px;color:var(--accent);margin-bottom:14px">Auswertung nach Themen</h2>';
+  const topics=[],tm={};
+  pool.forEach((q,i)=>{if(!tm[q.t]){tm[q.t]=[];topics.push(q.t);}tm[q.t].push({q,i});});
+  topics.forEach(topic=>{
+    const items=tm[topic],topicC=items.filter(({q})=>sub[q.id]&&sel[q.id]===q.c).length;
+    h+='<div style="margin:12px 0 5px;font-size:11px;font-weight:700;color:var(--accent)">'+topic+' ('+topicC+'/'+items.length+')</div>';
+    items.forEach(({q,i})=>{
+      const answered=sub[q.id],correct=answered&&sel[q.id]===q.c;
+      let cls='rr ',icn='ri2 ',icon='';
+      if(!answered){cls+='ru';icn+='ru';icon='–';}
+      else if(correct){cls+='rc';icn+='rc';icon='✓';}
+      else{cls+='rw';icn+='rw';icon='✗';}
+      const txt=q.q.length>55?q.q.slice(0,55)+'…':q.q;
+      h+='<div class="'+cls+'" style="cursor:pointer" onclick="mode=\'quiz\';cur='+i+';render()"><div class="'+icn+'">'+icon+'</div><div style="flex:1"><div style="font-weight:600">'+(i+1)+'. '+txt+'</div>';
+      if(!answered)h+='<div style="font-size:10px;color:var(--dim)">Nicht beantwortet</div>';
+      h+='</div></div>';
+    });
+  });
+  h+='<div style="display:flex;gap:8px;margin-top:16px"><button class="btn b1" style="flex:2" onclick="resetQuiz()">🔄 Quiz wiederholen ('+totalQ+')</button><button class="btn b4" onclick="goMenu()">↩ Hauptmenü</button></div>';
+  document.getElementById('app').innerHTML=h;
+  fixThemeBtn();
+}
+
+function fixThemeBtn(){try{if(document.body.classList.contains('dark')){const b=document.getElementById('thBtn');if(b)b.textContent='☀️';}}catch(e){}}
+
+// Init
+(function(){try{const s=localStorage.getItem('nw-quiz-theme');if(s==='dark'){document.body.classList.add('dark');}else if(!s&&window.matchMedia('(prefers-color-scheme:dark)').matches){document.body.classList.add('dark');}}catch(e){}})();
+document.addEventListener('keydown',e=>{if(e.key==='Enter'){const b=document.querySelector('.b1:not([disabled])');if(b)b.click();}});
+renderMenu();
+</script>
+</body>
+</html>

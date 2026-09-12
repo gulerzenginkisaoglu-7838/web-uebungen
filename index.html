@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz-Portal</title>
+<style>
+  :root{
+    --bg: #0b1220;
+    --panel: #101a2e;
+    --panel-border: #1f2f4d;
+    --text: #e7edf6;
+    --muted: #8ea0bd;
+    --amber: #ffb454;
+    --cyan: #5ad1e6;
+    --green: #6fd08c;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(90,209,230,0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, rgba(255,180,84,0.08), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family: "JetBrains Mono", "Consolas", "SFMono-Regular", Menlo, monospace;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 1.25rem;
+  }
+
+  .frame{
+    width:100%;
+    max-width:760px;
+  }
+
+  .prompt{
+    color:var(--muted);
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    margin-bottom:0.4rem;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .dot{ width:7px;height:7px;border-radius:50%;background:var(--green); box-shadow:0 0 8px var(--green); }
+
+  h1{
+    font-family: "Space Grotesk", "Segoe UI", sans-serif;
+    font-weight:700;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height:1.05;
+    margin: 0 0 0.35rem 0;
+    letter-spacing:-0.01em;
+  }
+  h1 .accent{ color:var(--amber); }
+
+  .sub{
+    color:var(--muted);
+    font-size:1rem;
+    margin: 0 0 2.75rem 0;
+    max-width: 46ch;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:1rem;
+  }
+  @media (max-width:560px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    position:relative;
+    display:block;
+    text-decoration:none;
+    color:var(--text);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0));
+    border:1px solid var(--panel-border);
+    border-radius:10px;
+    padding:1.25rem 1.3rem;
+    overflow:hidden;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:0 auto 0 0;
+    width:3px;
+    background: var(--card-accent, var(--cyan));
+    opacity:0.9;
+  }
+  .card:hover{
+    transform: translateY(-2px);
+    border-color: var(--card-accent, var(--cyan));
+    background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01));
+  }
+  .card:focus-visible{
+    outline:2px solid var(--card-accent, var(--cyan));
+    outline-offset:2px;
+  }
+
+  .card .idx{
+    font-size:0.72rem;
+    color: var(--card-accent, var(--cyan));
+    letter-spacing:0.12em;
+    margin-bottom:0.55rem;
+    display:block;
+  }
+  .card .name{
+    font-family:"Space Grotesk","Segoe UI",sans-serif;
+    font-size:1.15rem;
+    font-weight:600;
+    margin-bottom:0.3rem;
+  }
+  .card .desc{
+    font-size:0.82rem;
+    color:var(--muted);
+    line-height:1.4;
+  }
+  .card .arrow{
+    position:absolute;
+    right:1.1rem; top:1.1rem;
+    color:var(--muted);
+    font-size:0.9rem;
+    transition: transform .18s ease, color .18s ease;
+  }
+  .card:hover .arrow{
+    transform: translate(3px,-3px);
+    color: var(--card-accent, var(--cyan));
+  }
+
+  footer{
+    margin-top:2.5rem;
+    color:var(--muted);
+    font-size:0.78rem;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  footer .sep{ opacity:0.4; }
+</style>
+</head>
+<body>
+
+  <div class="frame">
+
+
+    <h1>Wähle dein <span class="accent">Quiz</span>.</h1>
+   
+
+    <div class="grid">
+
+      <a class="card" style="--card-accent:#ffb454" href="zzahlenquiz 1.html">
+        <span class="idx">01 · ZAHLEN</span>
+        <div class="name">Zahlenquiz</div>
+   
+        <span class="arrow">↗</span>
+      </a>
+
+      <a class="card" style="--card-accent:#5ad1e6" href="IPv4_Quiz.html">
+        <span class="idx">02 · NETZ</span>
+        <div class="name">IPv4-Quiz</div>
+        
+        <span class="arrow">↗</span>
+      </a>
+
+      <a class="card" style="--card-accent:#6fd08c" href="LF09_Quiz_W1.html">
+        <span class="idx">03 · WOCHE 1</span>
+        <div class="name">Quiz Woche 1</div>
+       
+        <span class="arrow">↗</span>
+      </a>
+
+    </div>
+
+    <footer>
+
+    </footer>
+  </div>
+
+</body>
+</html>

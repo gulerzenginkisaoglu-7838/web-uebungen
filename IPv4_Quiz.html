@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPv4 Subnetting Quiz Pro</title>
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #dddddd;
+            --input-bg: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+        }
+
+        .dark-mode {
+            --primary-color: #4CAF50;
+            --primary-hover: #45a049;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --border-color: #333333;
+            --input-bg: #2d2d2d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+        }
+
+        .main-layout {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            width: fit-content;
+            max-width: 100%;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            min-width: 300px;
+            max-width: 600px;
+            position: relative;
+            transition: background-color 0.3s;
+            z-index: 2;
+        }
+
+        .side-panel {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 300px;
+            transition: background-color 0.3s, opacity 0.3s;
+
+            position: absolute;
+            left: 100%;
+            top: 0;
+            margin-left: 20px;
+        }
+
+        @media (max-width: 1000px) {
+            .main-layout {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+
+            .side-panel {
+                position: static;
+                width: 100%;
+                max-width: 600px;
+                margin-left: 0;
+                margin-top: 20px;
+            }
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            padding: 5px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background-color: rgba(128, 128, 128, 0.1);
+        }
+
+        .score-board {
+            background-color: rgba(128, 128, 128, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+        }
+
+        .instructions {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .question-area {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: rgba(76, 175, 80, 0.1);
+            border-radius: 8px;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        input.success {
+            border-color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        input.error {
+            border-color: var(--error-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .result-message {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            min-height: 1.5em;
+        }
+
+        .text-success {
+            color: var(--success-color);
+        }
+
+        .text-error {
+            color: var(--error-color);
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Cheat sheet table styles */
+        .cidr-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .cidr-table th,
+        .cidr-table td {
+            text-align: left;
+            padding: 4px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        .cidr-table th {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-layout">
+        <div class="container">
+            <header>
+                <h1>IPv4 Quiz</h1>
+                <div class="header-controls">
+                    <button id="cheatSheetToggle" class="icon-btn" title="Spickzettel">💡</button>
+                    <button id="darkModeToggle" class="icon-btn" title="Design wechseln">🌓</button>
+                </div>
+            </header>
+
+            <div class="score-board">
+                Punkte: <span id="score">0</span> / <span id="total">0</span>
+            </div>
+
+            <div id="gameArea" class="hidden">
+                <div id="questionContainer" class="question-area"></div>
+
+                <div class="input-group">
+                    <label for="subnetInput">Subnetzmaske</label>
+                    <input type="text" id="subnetInput" placeholder="255.255.255.0" autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="networkInput">Netz-ID</label>
+                    <input type="text" id="networkInput" placeholder="192.168.0.0" autocomplete="off">
+                </div>
+
+                <div class="input-group">
+                    <label for="broadcastInput">Broadcast-Adresse</label>
+                    <input type="text" id="broadcastInput" placeholder="192.168.0.255" autocomplete="off">
+                </div>
+
+                <button id="checkAnswerButton" class="btn">Antwort prüfen</button>
+                <button id="showSolutionButton" class="btn btn-secondary hidden"
+                    style="background-color: #e67e22;">Lösung anzeigen</button>
+                <div id="result" class="result-message"></div>
+                <button id="nextButton" class="btn btn-secondary hidden">Nächste Frage</button>
+            </div>
+
+            <div id="startScreen">
+                <div class="instructions">
+                    <p>Berechne Subnetzmaske, Netz-ID und Broadcast-Adresse der angezeigten IPv4-Adresse.</p>
+
+                    <div style="margin: 1.5rem 0;">
+                        <label for="difficultySelect" style="text-align: left;">Schwierigkeit:</label>
+                        <select id="difficultySelect"
+                            style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid var(--border-color); background: var(--input-bg); color: var(--text-color);">
+                            <option value="easy">Einfach (/8, /16, /24)</option>
+                            <option value="normal" selected>Normal (/14 - /30)</option>
+                            <option value="hard">Schwer (Alle CIDR)</option>
+                        </select>
+                    </div>
+
+                    <p><strong>Regeln:</strong></p>
+                    <p>Wähle deine Schwierigkeit und fülle alle drei Felder korrekt aus.</p>
+                </div>
+                <button id="startButton" class="btn">Quiz Starten</button>
+            </div>
+        </div>
+
+        <div id="cheatSheet" class="side-panel hidden">
+            <h3 style="margin-bottom: 1rem; color: var(--text-color);">CIDR Spickzettel</h3>
+            <table class="cidr-table">
+                <thead>
+                    <tr>
+                        <th>CIDR</th>
+                        <th>Maske</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>/8</td>
+                        <td>255.0.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>/16</td>
+                        <td>255.255.0.0</td>
+                    </tr>
+                    <tr>
+                        <td>/24</td>
+                        <td>255.255.255.0</td>
+                    </tr>
+                    <tr>
+                        <td>/25</td>
+                        <td> .128</td>
+                    </tr>
+                    <tr>
+                        <td>/26</td>
+                        <td> .192</td>
+                    </tr>
+                    <tr>
+                        <td>/27</td>
+                        <td> .224</td>
+                    </tr>
+                    <tr>
+                        <td>/28</td>
+                        <td> .240</td>
+                    </tr>
+                    <tr>
+                        <td>/29</td>
+                        <td> .248</td>
+                    </tr>
+                    <tr>
+                        <td>/30</td>
+                        <td> .252</td>
+                    </tr>
+                    <tr>
+                        <td>/31</td>
+                        <td> .254</td>
+                    </tr>
+                    <tr>
+                        <td>/32</td>
+                        <td> .255</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-secondary);">
+                Tipp: Die Adresse bezieht sich immer auf das letzte Oktett, welches durch die Maske geteilt wird.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Zustand
+        let currentQuestion = {};
+        let score = 0;
+        let totalQuestions = 0;
+
+        // Elemente
+        const els = {
+            startScreen: document.getElementById('startScreen'),
+            gameArea: document.getElementById('gameArea'),
+            questionContainer: document.getElementById('questionContainer'),
+            inputs: {
+                subnet: document.getElementById('subnetInput'),
+                network: document.getElementById('networkInput'),
+                broadcast: document.getElementById('broadcastInput')
+            },
+            buttons: {
+                start: document.getElementById('startButton'),
+                check: document.getElementById('checkAnswerButton'),
+                solve: document.getElementById('showSolutionButton'),
+                next: document.getElementById('nextButton'),
+                theme: document.getElementById('darkModeToggle'),
+                cheat: document.getElementById('cheatSheetToggle')
+            },
+            other: {
+                difficulty: document.getElementById('difficultySelect'),
+                cheatSheet: document.getElementById('cheatSheet')
+            },
+            result: document.getElementById('result'),
+            score: document.getElementById('score'),
+            total: document.getElementById('total')
+        };
+
+        // Hilfsfunktionen
+        const getRandomNumber = (max) => Math.floor(Math.random() * (max + 1));
+        const getRandomRange = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // Spiel Logik
+        function generateQuestion() {
+            const difficulty = els.other.difficulty.value;
+            let cidr;
+
+            if (difficulty === 'easy') {
+                const options = [8, 16, 24];
+                cidr = options[Math.floor(Math.random() * options.length)];
+            } else if (difficulty === 'normal') {
+                cidr = getRandomRange(14, 30);
+            } else {
+                cidr = getRandomRange(1, 30); // Hard: fast alles
+            }
+
+            // Generiere IP
+            const ipParts = [
+                Math.floor(Math.random() * 256),
+                Math.floor(Math.random() * 256),
+                Math.floor(Math.random() * 256),
+                Math.floor(Math.random() * 256)
+            ];
+
+            const ipString = ipParts.join('.');
+            const fullIp = `${ipString} / ${cidr}`;
+
+            // Berechnungen
+            let mask = Array(32).fill(0);
+            for (let i = 0; i < cidr; i++) mask[i] = 1;
+
+            const subnetMask = mask.join('').match(/.{8}/g).map(bin => parseInt(bin, 2)).join('.');
+
+            const networkId = ipParts.map((part, index) => part & parseInt(subnetMask.split('.')[index], 10)).join('.');
+
+            const negatedMask = mask.map(bit => bit === 1 ? 0 : 1);
+            const broadcastBits = negatedMask.join('').match(/.{8}/g).map(bin => parseInt(bin, 2));
+            const broadcastId = ipParts.map((part, index) => part | broadcastBits[index]).join('.');
+
+            currentQuestion = {
+                display: fullIp,
+                subnet: subnetMask,
+                network: networkId,
+                broadcast: broadcastId
+            };
+
+            // UI Reset
+            resetInputs();
+            els.result.textContent = '';
+            els.buttons.check.classList.remove('hidden');
+            els.buttons.solve.classList.add('hidden');
+            els.buttons.next.classList.add('hidden');
+
+            els.questionContainer.textContent = `IP-Adresse: ${currentQuestion.display}`;
+            els.inputs.subnet.focus();
+        }
+
+        function resetInputs() {
+            Object.values(els.inputs).forEach(input => {
+                input.value = '';
+                input.disabled = false;
+                input.classList.remove('success', 'error');
+            });
+        }
+
+        function checkAnswer() {
+            const userSubnet = els.inputs.subnet.value.trim();
+            const userNetwork = els.inputs.network.value.trim();
+            const userBroadcast = els.inputs.broadcast.value.trim();
+
+            const isSubnetCorrect = userSubnet === currentQuestion.subnet;
+            const isNetworkCorrect = userNetwork === currentQuestion.network;
+            const isBroadcastCorrect = userBroadcast === currentQuestion.broadcast;
+
+            setInputStatus(els.inputs.subnet, isSubnetCorrect);
+            setInputStatus(els.inputs.network, isNetworkCorrect);
+            setInputStatus(els.inputs.broadcast, isBroadcastCorrect);
+
+            const allCorrect = isSubnetCorrect && isNetworkCorrect && isBroadcastCorrect;
+
+            if (allCorrect) {
+                els.result.innerHTML = '<span class="text-success">Richtig! 🎉</span>';
+                score++;
+                els.buttons.check.classList.add('hidden');
+                els.buttons.solve.classList.add('hidden');
+                els.buttons.next.classList.remove('hidden');
+                els.buttons.next.focus();
+            } else {
+                els.result.innerHTML = '<span class="text-error">Leider falsch. Überprüfe die rot markierten Felder.</span>';
+                els.buttons.solve.classList.remove('hidden');
+            }
+
+            updateScoreBoard();
+        }
+
+        function showSolution() {
+            els.inputs.subnet.value = currentQuestion.subnet;
+            els.inputs.network.value = currentQuestion.network;
+            els.inputs.broadcast.value = currentQuestion.broadcast;
+
+            setInputStatus(els.inputs.subnet, true);
+            setInputStatus(els.inputs.network, true);
+            setInputStatus(els.inputs.broadcast, true);
+
+            els.result.innerHTML = '<span class="text-secondary">Lösung angezeigt. Keine Punkte.</span>';
+            els.buttons.check.classList.add('hidden');
+            els.buttons.solve.classList.add('hidden');
+            els.buttons.next.classList.remove('hidden');
+            els.buttons.next.focus();
+        }
+
+        function setInputStatus(input, isCorrect) {
+            input.classList.remove('success', 'error');
+            if (input.disabled) return;
+            input.classList.add(isCorrect ? 'success' : 'error');
+        }
+
+        function updateScoreBoard() {
+            els.score.textContent = score;
+            els.total.textContent = totalQuestions;
+        }
+
+        function startGame() {
+            els.startScreen.classList.add('hidden');
+            els.gameArea.classList.remove('hidden');
+            score = 0;
+            totalQuestions = 0;
+            updateScoreBoard();
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            totalQuestions++;
+            updateScoreBoard();
+            generateQuestion();
+        }
+
+        // Event Listener
+        els.buttons.start.addEventListener('click', startGame);
+        els.buttons.check.addEventListener('click', checkAnswer);
+        els.buttons.solve.addEventListener('click', showSolution);
+        els.buttons.next.addEventListener('click', nextQuestion);
+        els.buttons.cheat.addEventListener('click', () => {
+            els.other.cheatSheet.classList.toggle('hidden');
+        });
+
+        // Enter Key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                if (!els.gameArea.classList.contains('hidden')) {
+                    if (!els.buttons.check.classList.contains('hidden')) {
+                        checkAnswer();
+                    } else if (!els.buttons.next.classList.contains('hidden')) {
+                        nextQuestion();
+                    }
+                } else {
+                    startGame();
+                }
+            }
+        });
+
+        // Darkmode
+        const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
+        function applyTheme(isDark) {
+            if (isDark) document.body.classList.add('dark-mode');
+            else document.body.classList.remove('dark-mode');
+        }
+
+        const savedTheme = localStorage.getItem('darkMode');
+        if (savedTheme === 'enabled') applyTheme(true);
+        else if (savedTheme === 'disabled') applyTheme(false);
+        else applyTheme(systemDarkMode.matches);
+
+        els.buttons.theme.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+
+        systemDarkMode.addEventListener('change', (e) => {
+            if (!localStorage.getItem('darkMode')) applyTheme(e.matches);
+        });
+
+    </script>
+</body>
+
+</html>
